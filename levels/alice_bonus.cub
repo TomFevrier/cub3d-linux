@@ -3,9 +3,10 @@ NO ./textures/alice.xpm
 SO ./textures/alice.xpm
 WE ./textures/alice.xpm
 EA ./textures/alice.xpm
-S ./textures/alice.xpm
+S ./sprites/alice.xpm
 SK ./textures/alice.xpm
 F ./textures/alice.xpm
+M ./music/great_wall.mp3
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
@@ -17,7 +18,7 @@ F ./textures/alice.xpm
 1 0 0 0 0 0 1 1 0 1 1 0 0 0 0 1 0 1 0 1 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
-1 0 0 2 0 0 0 2 0 W 0 0 2 0 0 0 0 0 0 0 2 0 0 1
+1 0 0 2 0 0 0 2 0 N 0 0 2 0 0 0 0 0 0 0 2 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
