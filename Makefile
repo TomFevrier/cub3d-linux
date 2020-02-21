@@ -60,9 +60,9 @@ bonus:
 			gcc $(FLAGS) -I $(INC) -g -L $(LIB) -l mlx $(GFX_FLAGS) $(BONUS) -o $(NAME)_bonus
 
 run:		re
-			./$(NAME) test.cub
+			./$(NAME) /levels/test.cub
 
 run_save:	re
-			./$(NAME) test.cub --save
+			./$(NAME) /levels/test.cub --save
 
 .PHONY:		all clean fclean re bonus
