@@ -35,6 +35,8 @@ t_bool	move(t_world *world)
 	{
 		world->pos[0] += dx;
 		world->pos[1] += dy;
+		if (world->map[(int)world->pos[0]][(int)world->pos[1]] == 2)
+			world->life--;
 	}
 	return (TRUE);
 }
@@ -53,5 +55,20 @@ t_bool	rotate(t_world *world)
 	tmp = world->cam_plane[0];
 	world->cam_plane[0] = tmp * cos(angle) - world->cam_plane[1] * sin(angle);
 	world->cam_plane[1] = tmp * sin(angle) + world->cam_plane[1] * cos(angle);
+	return (TRUE);
+}
+
+t_bool	jump(t_world *world)
+{
+	static double gravity = -0.0225;
+
+	if (!world->ctrls.up && world->jump_coeff == 0)
+		return (FALSE);
+	if (world->ctrls.up && world->jump_coeff == 0)
+		world->jump_speed = 0.2;
+	world->jump_coeff += world->jump_speed;
+	world->jump_speed += gravity;
+	if (world->jump_coeff < 0)
+		world->jump_coeff = 0;
 	return (TRUE);
 }

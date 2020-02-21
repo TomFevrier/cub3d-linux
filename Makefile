@@ -1,4 +1,4 @@
-NAME =		cub3d
+NAME =		Cub3D
 
 SRCS =		srcs/cub3d.c \
 			srcs/init1.c \
@@ -60,9 +60,9 @@ bonus:
 			gcc $(FLAGS) -I $(INC) -g -L $(LIB) -l mlx $(GFX_FLAGS) $(BONUS) -o $(NAME)_bonus
 
 run:		re
-			./cub3d test.cub
+			./$(NAME) test.cub
 
 run_save:	re
-			./cub3d test.cub -save
+			./$(NAME) test.cub --save
 
 .PHONY:		all clean fclean re bonus

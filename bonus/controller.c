@@ -12,9 +12,21 @@
 
 #include "cub3d.h"
 
-void	free_all(t_world *world)
+void	free_textures(t_world *world)
 {
 	t_side	side;
+
+	side = N;
+	while (side < E)
+	{
+		if (world->textures[side].data)
+			mlx_destroy_image(world->mlx.ptr, world->textures[side].ptr);
+		side++;
+	}
+}
+
+void	free_all(t_world *world)
+{
 	int		i;
 
 	if (world->map)
@@ -32,10 +44,7 @@ void	free_all(t_world *world)
 		mlx_destroy_image(world->mlx.ptr, world->screen.ptr);
 	if (world->texture_sprite.data)
 		mlx_destroy_image(world->mlx.ptr, world->texture_sprite.ptr);
-	side = N;
-	while (side < E)
-		if (world->textures[side].data)
-			mlx_destroy_image(world->mlx.ptr, world->textures[side++].ptr);
+	free_textures(world);
 	if (world->mlx.win)
 		mlx_destroy_window(world->mlx.ptr, world->mlx.win);
 	free(world);
@@ -61,6 +70,12 @@ int		key_pressed(int key, t_world *world)
 		world->ctrls.left = TRUE;
 	else if (key == KEY_RIGHT)
 		world->ctrls.right = TRUE;
+	else if (key == KEY_UP)
+		world->ctrls.up = TRUE;
+	else if (key == KEY_DOWN)
+		world->ctrls.down = TRUE;
+	else if (key == KEY_F10)
+		save_screenshot(world);
 	return (TRUE);
 }
 
@@ -78,6 +93,10 @@ int		key_released(int key, t_world *world)
 		world->ctrls.left = FALSE;
 	else if (key == KEY_RIGHT)
 		world->ctrls.right = FALSE;
+	else if (key == KEY_UP)
+		world->ctrls.up = FALSE;
+	else if (key == KEY_DOWN)
+		world->ctrls.down = FALSE;
 	return (TRUE);
 }
 

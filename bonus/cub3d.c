@@ -12,14 +12,28 @@
 
 #include "cub3d.h"
 
+void	game_over(t_world *world)
+{
+	write_text(world, world->scr_width / 2, world->scr_height / 2 - 20,
+		"GAME OVER");
+	write_text(world, world->scr_width / 2, world->scr_height / 2,
+		"Press ECHAP to quit the game");
+	world->game_over = TRUE;
+}
+
 int		game_loop(t_world *world)
 {
 	t_bool	should_draw;
 
+	if (world->game_over)
+		return (TRUE);
 	should_draw = move(world);
 	should_draw = rotate(world) || should_draw;
+	should_draw = jump(world) || should_draw;
 	if (should_draw)
 		draw(world);
+	if (world->life <= 0)
+		game_over(world);
 	return (TRUE);
 }
 
@@ -31,10 +45,8 @@ int		main(int argc, char **argv)
 	if (!(world = world_init(argc, argv)))
 		return (ERROR);
 	pid = fork();
-	if (pid == 0)
-	{
+	if (pid == 0 && !world->save)
 		system("afplay music.mp3");
-	}
 	else
 	{
 		draw(world);

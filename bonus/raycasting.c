@@ -20,8 +20,10 @@ void	draw_line_textured(t_world *world, int i, t_texdata data)
 	t_img	texture;
 	int		color;
 
-	start = world->scr_height / 2 - data.line_height / 2;
-	end = world->scr_height / 2 + data.line_height / 2;
+	start = world->scr_height / 2
+		- data.line_height / 2 * (1 - world->jump_coeff);
+	end = world->scr_height / 2
+		+ data.line_height / 2 * (1 + world->jump_coeff);
 	texture = world->textures[data.side];
 	j = 0;
 	while (j < (start < 0 ? 0 : start))

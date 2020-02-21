@@ -50,9 +50,9 @@ void	write_bmp_header(t_world *world)
 
 void	flip_pixels(t_world *world)
 {
-	int	i;
-	int	j;
-	int tmp;
+	int		i;
+	int		j;
+	int		tmp;
 
 	i = 0;
 	while (i < world->scr_width)
@@ -62,8 +62,8 @@ void	flip_pixels(t_world *world)
 		{
 			tmp = get_screen_pixel(world->screen, i, j);
 			set_screen_pixel(world->screen, i, j,
-				get_screen_pixel(world->screen, i, j + 1));
-			set_screen_pixel(world->screen, i, j + 1, tmp);
+				get_screen_pixel(world->screen, i, world->scr_height - j - 1));
+			set_screen_pixel(world->screen, i, world->scr_height - j - 1, tmp);
 			j++;
 		}
 		i++;

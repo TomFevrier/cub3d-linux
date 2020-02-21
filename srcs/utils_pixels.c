@@ -46,9 +46,9 @@ int		get_screen_pixel(t_img screen, int i, int j)
 	char	g;
 	char	b;
 
-	ptr = screen.data + i * screen.size_line + j * (screen.bpp >> 3);
+	ptr = screen.data + j * screen.size_line + i * (screen.bpp >> 3);
 	r = (screen.endian) ? *ptr : *(ptr + 2);
-	g = (*ptr + 1);
+	g = *(ptr + 1);
 	b = (screen.endian) ? *(ptr + 2) : *ptr;
 	return ((r << 16) + (g << 8) + b);
 }

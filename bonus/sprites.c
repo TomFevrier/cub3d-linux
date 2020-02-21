@@ -57,8 +57,10 @@ void	draw_line_sprite(t_world *world, t_spritedata data, int i,
 	int		j;
 	int		color;
 
-	bbox_y[0] = world->scr_height / 2 - data.sprite_size / 2;
-	bbox_y[1] = world->scr_height / 2 + data.sprite_size / 2;
+	bbox_y[0] = world->scr_height / 2
+		- data.sprite_size / 2 * (1 - world->jump_coeff);
+	bbox_y[1] = world->scr_height / 2
+		+ data.sprite_size / 2 * (1 + world->jump_coeff);
 	j = (bbox_y[0] < 0) ? 0 : bbox_y[0];
 	while (j < (bbox_y[1] >= world->scr_height
 		? world->scr_height - 1 : bbox_y[1]))

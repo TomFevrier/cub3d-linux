@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-void	draw_row_floor(t_world *world, int j, double right[2], double left[2])
+void	draw_row_floor(t_world *world, int j, double left[2], double right[2])
 {
 	double	row_dist;
 	double	step[2];
@@ -20,7 +20,8 @@ void	draw_row_floor(t_world *world, int j, double right[2], double left[2])
 	int		color;
 	int		i;
 
-	row_dist = 0.5 * world->scr_height / (j - world->scr_height / 2);
+	row_dist = 0.5 * (1 + world->jump_coeff)
+		* world->scr_height / (j - world->scr_height / 2);
 	step[0] = row_dist * (right[0] - left[0]) / world->scr_width;
 	step[1] = row_dist * (right[1] - left[1]) / world->scr_width;
 	floor_pos[0] = world->pos[0] + row_dist * left[0];
@@ -73,7 +74,6 @@ void	draw(t_world *world)
 	draw_floor(world);
 	draw_walls(world);
 	draw_sprites(world);
-	draw_minimap(world, 10, 10);
 	if (world->save)
 	{
 		flip_pixels(world);
@@ -82,6 +82,8 @@ void	draw(t_world *world)
 	}
 	else
 	{
+		draw_minimap(world, 20, 20, 100);
+		draw_life(world, -20, 20, 200);
 		mlx_put_image_to_window(world->mlx.ptr, world->mlx.win,
 			world->screen.ptr, 0, 0);
 	}

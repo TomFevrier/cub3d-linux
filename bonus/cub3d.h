@@ -37,6 +37,8 @@
 # define KEY_ESC 53
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
+# define KEY_UP 126
+# define KEY_DOWN 125
 # define KEY_F10 109
 
 typedef int			t_bool;
@@ -88,6 +90,8 @@ typedef struct		s_ctrls
 	t_bool	d;
 	t_bool	left;
 	t_bool	right;
+	t_bool	up;
+	t_bool	down;
 }					t_ctrls;
 
 typedef struct		s_img
@@ -131,8 +135,13 @@ typedef struct		s_world
 	int				nb_sprites;
 	t_sprite		*sprites;
 	t_ctrls			ctrls;
+	double			jump_coeff;
+	double			jump_speed;
+	int				life;
 	int				nb_pixels;
 	double			*depth_buffer;
+	int				minimap_unit;
+	t_bool			game_over;
 	t_bool			save;
 	int				fd_save;
 	int				screenshot_index;
@@ -142,7 +151,8 @@ t_world				*world_init(int argc, char **argv);
 
 t_bool				init_other_stuff(t_world *world);
 
-void				parse_line(t_world *world, char *line, int line_nb);
+void				parse_line(t_world *world, char *line, int line_nb,
+					int res);
 
 void				parsing_error(t_world *world, char *message, int line_nb);
 t_bool				parse_map(t_world *world);
@@ -159,7 +169,11 @@ void				run_dda(t_world *world, int i, double ray[2]);
 
 void				draw_sprites(t_world *world);
 
-void				draw_minimap(t_world *world, int offset_x, int offset_y);
+void				draw_minimap(t_world *world, int offset_x, int offset_y,
+					int width);
+void				draw_life(t_world *world, int offset_x, int offset_y,
+					int width);
+void				write_text(t_world *world, int x, int y, char *text);
 
 void				free_all(t_world *world);
 int					key_pressed(int key, t_world *world);
@@ -168,6 +182,7 @@ int					quit(t_world *world);
 
 t_bool				move(t_world *world);
 t_bool				rotate(t_world *world);
+t_bool				jump(t_world *world);
 
 int					ft_strlen(char *str);
 int					ft_indexof(char *str, char c);
@@ -185,5 +200,6 @@ t_bool				load_texture(t_world *world, t_img *texture,
 void				number_to_mem(char *dest, int nb, int nb_bytes);
 void				write_bmp_header(t_world *world);
 void				flip_pixels(t_world *world);
+void				save_screenshot(t_world *world);
 
 #endif

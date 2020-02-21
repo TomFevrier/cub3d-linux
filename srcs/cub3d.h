@@ -36,7 +36,6 @@
 # define KEY_ESC 53
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define KEY_F10 109
 
 typedef int			t_bool;
 
@@ -134,14 +133,14 @@ typedef struct		s_world
 	double			*depth_buffer;
 	t_bool			save;
 	int				fd_save;
-
 }					t_world;
 
 t_world				*world_init(int argc, char **argv);
 
 t_bool				init_other_stuff(t_world *world);
 
-void				parse_line(t_world *world, char *line, int line_nb);
+void				parse_line(t_world *world, char *line, int line_nb,
+					int res);
 
 void				parsing_error(t_world *world, char *message, int line_nb);
 t_bool				parse_map(t_world *world);

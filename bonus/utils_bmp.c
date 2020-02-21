@@ -50,9 +50,9 @@ void	write_bmp_header(t_world *world)
 
 void	flip_pixels(t_world *world)
 {
-	int	i;
-	int	j;
-	int tmp;
+	int		i;
+	int		j;
+	int		tmp;
 
 	i = 0;
 	while (i < world->scr_width)
@@ -62,10 +62,26 @@ void	flip_pixels(t_world *world)
 		{
 			tmp = get_screen_pixel(world->screen, i, j);
 			set_screen_pixel(world->screen, i, j,
-				get_screen_pixel(world->screen, i, j + 1));
-			set_screen_pixel(world->screen, i, j + 1, tmp);
+				get_screen_pixel(world->screen, i, world->scr_height - j - 1));
+			set_screen_pixel(world->screen, i, world->scr_height - j - 1, tmp);
 			j++;
 		}
 		i++;
 	}
+}
+
+void	save_screenshot(t_world *world)
+{
+	static char	filename[18] = "screenshot_00.bmp";
+
+	filename[11] = '0' + world->screenshot_index / 10;
+	filename[12] = '0' + world->screenshot_index % 10;
+	world->save = TRUE;
+	world->fd_save = open(filename, O_WRONLY | O_CREAT, 0777);
+	write_bmp_header(world);
+	draw(world);
+	close(world->fd_save);
+	world->save = FALSE;
+	world->screenshot_index = (world->screenshot_index + 1) % 100;
+	write_text(world, world->scr_width / 2, 10, "Screenshot saved!");
 }

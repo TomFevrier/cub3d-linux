@@ -96,7 +96,7 @@ void	read_file(t_world *world)
 	line_nb = 1;
 	while ((res = get_next_line(world->fd, &line)) >= 0)
 	{
-		parse_line(world, line, line_nb);
+		parse_line(world, line, line_nb, res);
 		free(line);
 		line_nb++;
 		if (res == 0)
@@ -114,6 +114,10 @@ t_world	*world_init(int argc, char **argv)
 		return (NULL);
 	if (!(world->mlx.ptr = mlx_init()))
 		return (NULL);
+	if (argc < 2)
+		parsing_error(world, "No scene file specified", 0);
+	if (ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub") != 0)
+		parsing_error(world, "File is invalid: should have extension .cub", 0);
 	world->fd = open(argv[1], O_RDONLY);
 	read_file(world);
 	close(world->fd);
@@ -123,7 +127,7 @@ t_world	*world_init(int argc, char **argv)
 	cam_init(world);
 	if (!sprites_init(world))
 		return (NULL);
-	world->save = (argc > 2) && (ft_strcmp(argv[2], "-save") == 0);
+	world->save = (argc > 2) && (ft_strcmp(argv[2], "--save") == 0);
 	if (!init_other_stuff(world))
 		return (NULL);
 	return (world);

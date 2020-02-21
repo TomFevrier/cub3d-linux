@@ -12,29 +12,10 @@
 
 #include "cub3d.h"
 
-void	debug_map(t_world *world)
+void	write_text(t_world *world, int x, int y, char *text)
 {
-	int i, j;
-
-	for (i = 0; i < world->map_height; i++)
-	{
-		for (j = 0; j < world->map_width; j++)
-		{
-			printf("%d ", world->map[i][j]);
-		}
-		printf("\n");
-	}
-}
-
-void	debug_sprites(t_world *world)
-{
-	int i;
-
-	printf("Sprites:\n");
-	for (i = 0; i < world->nb_sprites; i++)
-	{
-		printf("(%2d, %2d) Distance: %f\n", world->sprites[i].pos[0], world->sprites[i].pos[1], world->sprites[i].distance);
-	}
+	x -= ft_strlen(text) * 5;
+	mlx_string_put(world->mlx.ptr, world->mlx.win, x, y, 0xFFFFFF, text);
 }
 
 void	draw_square(t_world *world, int x, int y, int cell)
@@ -42,9 +23,7 @@ void	draw_square(t_world *world, int x, int y, int cell)
 	int		i;
 	int		j;
 	int		color;
-	int		unit;
 
-	unit = (int)(100 / world->map_width);
 	if (cell == 0)
 		color = 0xFFFFFF;
 	else if (cell == 1)
@@ -52,10 +31,10 @@ void	draw_square(t_world *world, int x, int y, int cell)
 	else
 		color = (cell == 2) ? 0x9F0000 : 0x009F00;
 	j = y;
-	while (j < y + unit)
+	while (j < y + world->minimap_unit)
 	{
 		i = x;
-		while (i < x + unit)
+		while (i < x + world->minimap_unit)
 		{
 			if (cell >= 0)
 				set_screen_pixel(world->screen, i, j, color);
@@ -65,25 +44,53 @@ void	draw_square(t_world *world, int x, int y, int cell)
 	}
 }
 
-void	draw_minimap(t_world *world, int offset_x, int offset_y)
+void	draw_minimap(t_world *world, int offset_x, int offset_y, int width)
 {
 	int		i;
 	int		j;
-	int		unit;
 
-	unit = (int)(100 / world->map_width);
+	world->minimap_unit = (int)(width / world->map_width);
+	if (offset_x < 0)
+		offset_x = world->scr_width + offset_x - width;
+	if (offset_y < 0)
+		offset_y = world->scr_height + offset_y
+		- world->map_height * world->minimap_unit;
 	j = 0;
 	while (j < world->map_height)
 	{
 		i = 0;
 		while (i < world->map_width)
 		{
-			draw_square(world, offset_x + j * unit,
-				offset_y + i * unit, world->map[i][j]);
+			draw_square(world, offset_x + j * world->minimap_unit,
+				offset_y + i * world->minimap_unit, world->map[i][j]);
 			i++;
 		}
 		j++;
 	}
-	draw_square(world, (int)(offset_x + world->pos[1] * unit),
-		(int)(offset_y + world->pos[0] * unit), 3);
+	draw_square(world, (int)(offset_x + world->pos[1] * world->minimap_unit),
+		(int)(offset_y + world->pos[0] * world->minimap_unit), 3);
+}
+
+void	draw_life(t_world *world, int offset_x, int offset_y, int width)
+{
+	int		i;
+	int		j;
+	int		color;
+
+	if (offset_x < 0)
+		offset_x = world->scr_width + offset_x - width;
+	if (offset_y < 0)
+		offset_y = world->scr_height + offset_y - width / 10;
+	j = offset_y;
+	while (j < offset_y + width / 10)
+	{
+		i = offset_x;
+		while (i < offset_x + width)
+		{
+			color = (i - offset_x < world->life * (width / 100))
+				? 0x9F0000 : 0xFFFFFF;
+			set_screen_pixel(world->screen, i++, j, color);
+		}
+		j++;
+	}
 }

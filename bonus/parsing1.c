@@ -14,6 +14,8 @@
 
 void	parse_resolution(t_world *world, char *ptr, int line_nb)
 {
+	if (world->scr_width)
+		parsing_error(world, "Resolution was already defined", line_nb);
 	while (*ptr <= ' ')
 		ptr++;
 	world->scr_width = ft_atoi_easy(ptr);
@@ -37,6 +39,14 @@ void	parse_texture(t_world *world, char *ptr, int id, int line_nb)
 {
 	t_img	*texture;
 
+	if (id == 4 && world->texture_sprite.data)
+		parsing_error(world, "Sprite texture was already defined", line_nb);
+	else if (id == 5 && world->texture_floor.data)
+		parsing_error(world, "Floor texture was already defined", line_nb);
+	else if (id == 6 && world->texture_sky.data)
+		parsing_error(world, "Sky texture was already defined", line_nb);
+	else if (id < 4 && world->textures[id].data)
+		parsing_error(world, "Wall texture was already defined", line_nb);
 	if (id < 4)
 		texture = &(world->textures[id]);
 	else if (id == 4)
@@ -45,22 +55,23 @@ void	parse_texture(t_world *world, char *ptr, int id, int line_nb)
 		texture = &(world->texture_floor);
 	else if (id == 6)
 		texture = &(world->texture_sky);
-	ptr++;
 	while (*ptr <= ' ')
 		ptr++;
 	if (!load_texture(world, texture, ft_trim(ptr)))
 		parsing_error(world, "Texture is invalid", line_nb);
 }
 
-void	parse_empty_line(t_world *world, char *ptr, int line_nb)
+void	parse_empty_line(t_world *world, char *ptr, int line_nb, int res)
 {
 	ptr = ft_remove_spaces(ptr);
 	if (ft_strlen(ptr) > 0)
 		parsing_error(world, "Invalid content", line_nb);
+	else if (world->raw_map && res > 0)
+		parsing_error(world, "Map contains an empty line", line_nb);
 	free(ptr);
 }
 
-void	parse_line(t_world *world, char *line, int line_nb)
+void	parse_line(t_world *world, char *line, int line_nb, int res)
 {
 	char	*ptr;
 
@@ -86,5 +97,5 @@ void	parse_line(t_world *world, char *line, int line_nb)
 	else if (ft_indexof("012NWSE", *ptr) >= 0)
 		read_map_row(world, ptr);
 	else
-		parse_empty_line(world, ptr, line_nb);
+		parse_empty_line(world, ptr, line_nb, res);
 }

@@ -25,6 +25,7 @@ int		ft_strlen(char *str)
 int		ft_indexof(char *str, char c)
 {
 	int	i;
+
 	if (!str)
 		return (-1);
 	i = 0;

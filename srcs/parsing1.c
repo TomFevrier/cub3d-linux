@@ -14,6 +14,8 @@
 
 void	parse_resolution(t_world *world, char *ptr, int line_nb)
 {
+	if (world->scr_width)
+		parsing_error(world, "Resolution was already defined", line_nb);
 	while (*ptr <= ' ')
 		ptr++;
 	world->scr_width = ft_atoi_easy(ptr);
@@ -35,54 +37,59 @@ void	parse_resolution(t_world *world, char *ptr, int line_nb)
 
 void	parse_color(t_world *world, char *ptr, char c, int line_nb)
 {
-	int		r;
-	int		g;
-	int		b;
+	int		color;
+	int		i;
 
-	while (*ptr <= ' ')
-		ptr++;
-	if (*ptr > '9' || *ptr < '0')
-		parsing_error(world, "Color is invalid", line_nb);
-	r = ft_atoi_easy(ptr);
-	while (*ptr >= '0' && *ptr <= '9')
-		ptr++;
-	(*ptr == ',') ? ptr++ : parsing_error(world, "Color is invalid", line_nb);
-	if (*ptr > '9' || *ptr < '0')
-		parsing_error(world, "Color is invalid", line_nb);
-	g = ft_atoi_easy(ptr);
-	while (*ptr >= '0' && *ptr <= '9')
-		ptr++;
-	(*ptr == ',') ? ptr++ : parsing_error(world, "Color is invalid", line_nb);
-	if (*ptr > '9' || *ptr < '0')
-		parsing_error(world, "Color is invalid", line_nb);
-	b = ft_atoi_easy(ptr);
+	if (c == 'F' && world->color_floor)
+		parsing_error(world, "Floor color was already defined", line_nb);
+	if (c == 'C' && world->color_ceiling)
+		parsing_error(world, "Ceiling color was already defined", line_nb);
+	i = 0;
+	color = 0;
+	while (i++ < 3)
+	{
+		while (*ptr <= ' ')
+			ptr++;
+		if (*ptr > '9' || *ptr < '0')
+			parsing_error(world, "Color is invalid", line_nb);
+		color = (color << 8) + ft_atoi_easy(ptr);
+		while (*ptr >= '0' && *ptr <= '9')
+			ptr++;
+		(*ptr == ',' || i == 3) ? ptr++
+			: parsing_error(world, "Color is invalid", line_nb);
+	}
 	if (c == 'F')
-		world->color_floor = (r << 16) + (g << 8) + b;
+		world->color_floor = color;
 	else
-		world->color_ceiling = (r << 16) + (g << 8) + b;
+		world->color_ceiling = color;
 }
 
 void	parse_texture(t_world *world, char *ptr, int id, int line_nb)
 {
 	t_img	*texture;
 
+	if (id == 4 && world->texture_sprite.data)
+		parsing_error(world, "Sprite texture was already defined", line_nb);
+	else if (id < 4 && world->textures[id].data)
+		parsing_error(world, "Wall texture was already defined", line_nb);
 	texture = (id < 4) ? &(world->textures[id]) : &(world->texture_sprite);
-	ptr++;
 	while (*ptr <= ' ')
 		ptr++;
 	if (!load_texture(world, texture, ft_trim(ptr)))
 		parsing_error(world, "Texture is invalid", line_nb);
 }
 
-void	parse_empty_line(t_world *world, char *ptr, int line_nb)
+void	parse_empty_line(t_world *world, char *ptr, int line_nb, int res)
 {
 	ptr = ft_remove_spaces(ptr);
 	if (ft_strlen(ptr) > 0)
-		parsing_error(world, "Invalid content", line_nb);
+		parsing_error(world, "Content is invalid", line_nb);
+	else if (world->raw_map && res > 0)
+		parsing_error(world, "Map contains an empty line", line_nb);
 	free(ptr);
 }
 
-void	parse_line(t_world *world, char *line, int line_nb)
+void	parse_line(t_world *world, char *line, int line_nb, int res)
 {
 	char	*ptr;
 
@@ -106,5 +113,5 @@ void	parse_line(t_world *world, char *line, int line_nb)
 	else if (ft_indexof("012NWSE", *ptr) >= 0)
 		read_map_row(world, ptr);
 	else
-		parse_empty_line(world, ptr, line_nb);
+		parse_empty_line(world, ptr, line_nb, res);
 }
