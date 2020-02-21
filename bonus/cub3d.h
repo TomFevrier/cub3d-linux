@@ -127,13 +127,9 @@ typedef struct		s_world
 	t_img			texture_floor;
 	t_img			texture_sky;
 	t_img			texture_sprite;
-	double			pos[2];
-	double			dir[2];
-	double			cam_plane[2];
-	t_side			cam_dir;
-	t_img			screen;
 	int				nb_sprites;
 	t_sprite		*sprites;
+	t_img			screen;
 	t_ctrls			ctrls;
 	double			jump_coeff;
 	double			jump_speed;
@@ -141,7 +137,12 @@ typedef struct		s_world
 	int				nb_pixels;
 	double			*depth_buffer;
 	int				minimap_unit;
+	double			pos[2];
+	double			dir[2];
+	double			cam_plane[2];
+	t_side			cam_dir;
 	t_bool			game_over;
+	char			*music_file;
 	t_bool			save;
 	int				fd_save;
 	int				screenshot_index;

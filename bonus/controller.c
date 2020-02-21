@@ -40,6 +40,8 @@ void	free_all(t_world *world)
 		free(world->sprites);
 	if (world->depth_buffer)
 		free(world->depth_buffer);
+	if (world->music_file)
+		free(world->music_file);
 	if (world->screen.data)
 		mlx_destroy_image(world->mlx.ptr, world->screen.ptr);
 	if (world->texture_sprite.data)

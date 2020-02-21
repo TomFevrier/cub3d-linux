@@ -71,6 +71,18 @@ void	parse_empty_line(t_world *world, char *ptr, int line_nb, int res)
 	free(ptr);
 }
 
+void	parse_line_more(t_world *world, char *ptr, int line_nb, int res)
+{
+	if (*ptr == 'M')
+	{
+		world->music_file = ft_remove_spaces(ptr + 1);
+		if (access(world->music_file, F_OK) < 0)
+			parsing_error(world, "Music file does not exist", line_nb);
+	}
+	else
+		parse_empty_line(world, ptr, line_nb, res);
+}
+
 void	parse_line(t_world *world, char *line, int line_nb, int res)
 {
 	char	*ptr;
@@ -97,5 +109,5 @@ void	parse_line(t_world *world, char *line, int line_nb, int res)
 	else if (ft_indexof("012NWSE", *ptr) >= 0)
 		read_map_row(world, ptr);
 	else
-		parse_empty_line(world, ptr, line_nb, res);
+		parse_line_more(world, ptr, line_nb, res);
 }

@@ -28,6 +28,8 @@ void	check_missing(t_world *world)
 		parsing_error(world, "South texture must be defined before the map", 0);
 	else if (!world->textures[E].data)
 		parsing_error(world, "East texture must be defined before the map", 0);
+	else if (!world->music_file)
+		parsing_error(world, "Music file must be defined before the map", 0);
 }
 
 t_bool	check_map_row(t_world *world, int i, int j, t_bool cam_parsed)

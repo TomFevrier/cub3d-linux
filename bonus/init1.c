@@ -118,7 +118,8 @@ t_world	*world_init(int argc, char **argv)
 		parsing_error(world, "No scene file specified", 0);
 	if (ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub") != 0)
 		parsing_error(world, "File is invalid: should have extension .cub", 0);
-	world->fd = open(argv[1], O_RDONLY);
+	if ((world->fd = open(argv[1], O_RDONLY)) < 0)
+		parsing_error(world, "File does not exist", 0);
 	read_file(world);
 	close(world->fd);
 	if (!parse_map(world))

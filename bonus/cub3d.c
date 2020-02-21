@@ -41,12 +41,16 @@ int		main(int argc, char **argv)
 {
 	t_world		*world;
 	pid_t		pid;
+	char		*command;
 
 	if (!(world = world_init(argc, argv)))
 		return (ERROR);
-	pid = fork();
-	if (pid == 0 && !world->save)
-		system("afplay music.mp3");
+	if ((pid = fork()) == 0 && !world->save)
+	{
+		command = ft_strjoin("afplay ", world->music_file);
+		system(command);
+		free(command);
+	}
 	else
 	{
 		draw(world);
