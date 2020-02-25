@@ -115,7 +115,6 @@ t_world	*world_init(char *filename)
 	if (!(world->mlx.ptr = mlx_init()))
 		return (NULL);
 	world->levels = NULL;
-	world->resolution_defined = FALSE;
 	world->fd = open(filename, O_RDONLY);
 	read_file(world);
 	close(world->fd);

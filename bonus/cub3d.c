@@ -18,7 +18,7 @@ void	game_over(t_world *world)
 
 	pos[0] = world->scr_width / 2;
 	pos[1] = world->scr_height / 2 - 20;
-	write_text(world, pos, "GAME OVER", 0xFFFFFF);
+	write_text(world, pos, "GAME OVER", 0x9FFFFF);
 	pos[1] += 20;
 	write_text(world, pos, "Press ECHAP to return to the main menu", 0xFFFFFF);
 	world->game_over = TRUE;

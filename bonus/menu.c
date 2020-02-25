@@ -67,7 +67,7 @@ void	draw_menu(t_world *world)
 		pos[1] += 30;
 		level_name = ft_strdup(world->levels[i]);
 		write_text(world, pos, format_name(level_name),
-		(world->selected_level == i) ? 0xFF0000 : 0xFFFFFF);
+		(world->selected_level == i) ? 0x9F0000 : 0xFFFFFF);
 		free(level_name);
 		i++;
 	}
