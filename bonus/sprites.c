@@ -81,6 +81,9 @@ void	draw_sprite(t_world *world, t_spritedata data)
 
 	bbox_x[0] = data.sprite_x - data.sprite_size / 2;
 	bbox_x[1] = data.sprite_x + data.sprite_size / 2;
+	world->sprites[data.index].killable =
+		bbox_x[0] < world->scr_width / 2 && bbox_x[1] > world->scr_width / 2
+		&& data.transform[1] < 2;
 	i = (bbox_x[0] < 0) ? 0 : bbox_x[0];
 	while (i <= (bbox_x[1] >= world->scr_width ?
 		world->scr_width - 1 : bbox_x[1]))
@@ -114,7 +117,8 @@ void	draw_sprites(t_world *world)
 		data.sprite_x = (int)((world->scr_width / 2) *
 			(1 + data.transform[0] / data.transform[1]));
 		data.sprite_size = abs((int)(world->scr_height / data.transform[1]));
-		draw_sprite(world, data);
+		if (!world->sprites[data.index].destroyed)
+			draw_sprite(world, data);
 		data.index++;
 	}
 }

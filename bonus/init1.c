@@ -106,16 +106,16 @@ void	read_file(t_world *world)
 		parsing_error(world, "File is corrupted", 0);
 }
 
-t_world	*world_init(char *filename)
+t_world	*world_init(char *filename, t_menu *menu)
 {
 	t_world	*world;
 
 	if (!(world = (t_world *)calloc(1, sizeof(t_world))))
 		return (NULL);
-	if (!(world->mlx.ptr = mlx_init()))
-		return (NULL);
-	world->levels = NULL;
+	world->mlx.ptr = menu->mlx.ptr;
+	world->menu = menu;
 	world->fd = open(filename, O_RDONLY);
+	free(filename);
 	read_file(world);
 	close(world->fd);
 	if (!parse_map(world))
@@ -124,6 +124,7 @@ t_world	*world_init(char *filename)
 	cam_init(world);
 	if (!sprites_init(world))
 		return (NULL);
+	load_texture(world, &(world->texture_gun), "./sprites/gun.xpm");
 	if (!init_other_stuff(world))
 		return (NULL);
 	return (world);

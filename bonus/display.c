@@ -12,14 +12,14 @@
 
 #include "cub3d.h"
 
-void	write_text(t_world *world, int pos[2], char *text, int color)
+void	write_text(t_mlx mlx, int pos[2], char *text, int color)
 {
 	int		x;
 	int		y;
 
 	x = pos[0] - ft_strlen(text) * 5;
 	y = pos[1];
-	mlx_string_put(world->mlx.ptr, world->mlx.win, x, y, color, text);
+	mlx_string_put(mlx.ptr, mlx.win, x, y, color, text);
 }
 
 void	draw_square(t_world *world, int x, int y, int cell)
@@ -96,5 +96,28 @@ void	draw_life(t_world *world, int offset_x, int offset_y, int width)
 			set_screen_pixel(world->screen, i++, j, color);
 		}
 		j++;
+	}
+}
+
+void	draw_gun(t_world *world)
+{
+	int		i;
+	int		j;
+	int		color;
+
+	i = 0.4 * world->scr_width;
+	while (i < 0.8 * world->scr_width)
+	{
+		j = 0.6 * world->scr_height;
+		while (j < world->scr_height)
+		{
+			color = get_tex_color(world->texture_gun,
+				((i - 0.4 * world->scr_width) / (0.4 * world->scr_width)),
+				((j - 0.6 * world->scr_height) / (0.4 * world->scr_height)));
+			if (color != 0)
+				set_screen_pixel(world->screen, i, j, color);
+			j++;
+		}
+		i++;
 	}
 }

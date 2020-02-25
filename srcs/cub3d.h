@@ -157,7 +157,7 @@ void				run_dda(t_world *world, int i, double ray[2]);
 
 void				draw_sprites(t_world *world);
 
-void				free_all(t_world *world);
+void				free_world(t_world *world);
 int					key_pressed(int key, t_world *world);
 int					key_released(int key, t_world *world);
 int					quit(t_world *world);

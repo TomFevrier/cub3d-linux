@@ -84,6 +84,7 @@ void	draw(t_world *world)
 	{
 		draw_minimap(world, 20, 20, 100);
 		draw_life(world, -20, 20, 200);
+		draw_gun(world);
 		mlx_put_image_to_window(world->mlx.ptr, world->mlx.win,
 			world->screen.ptr, 0, 0);
 	}

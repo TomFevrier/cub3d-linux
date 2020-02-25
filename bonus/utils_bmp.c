@@ -86,5 +86,5 @@ void	save_screenshot(t_world *world)
 	world->screenshot_index = (world->screenshot_index + 1) % 100;
 	pos[0] = world->scr_width / 2;
 	pos[1] = 10;
-	write_text(world, pos, "Screenshot saved!", 0xFFFFFF);
+	write_text(world->mlx, pos, "Screenshot saved!", 0xFFFFFF);
 }

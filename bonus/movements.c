@@ -72,3 +72,23 @@ t_bool	jump(t_world *world)
 		world->jump_coeff = 0;
 	return (TRUE);
 }
+
+t_bool	shoot(t_world *world)
+{
+	int		i;
+
+	if (!world->ctrls.space)
+		return (FALSE);
+	i = world->nb_sprites - 1;
+	while (i >= 0)
+	{
+		if (world->sprites[i].killable)
+		{
+			world->sprites[i].destroyed = TRUE;
+			world->map[world->sprites[i].pos[0]][world->sprites[i].pos[1]] = 0;
+			break ;
+		}
+		i--;
+	}
+	return (TRUE);
+}

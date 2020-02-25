@@ -12,6 +12,18 @@
 
 #include "cub3d.h"
 
+void	free_menu(t_menu *menu)
+{
+	int		i;
+
+	i = 0;
+	while (i < menu->nb_levels)
+		free(menu->levels[i++]);
+	free(menu->levels);
+	mlx_destroy_window(menu->mlx.ptr, menu->mlx.win);
+	free(menu);
+}
+
 void	free_textures(t_world *world)
 {
 	t_side	side;
@@ -38,20 +50,7 @@ void	free_map(t_world *world)
 	}
 }
 
-void	free_levels(t_world *world)
-{
-	int		i;
-
-	if (world->levels)
-	{
-		i = 0;
-		while (i < world->nb_levels)
-			free(world->levels[i++]);
-		free(world->levels);
-	}
-}
-
-void	free_all(t_world *world)
+void	free_world(t_world *world)
 {
 	write(1, "caca\n", 5);
 	if (world->sprites)
@@ -64,13 +63,15 @@ void	free_all(t_world *world)
 		mlx_destroy_image(world->mlx.ptr, world->screen.ptr);
 	if (world->texture_sprite.data)
 		mlx_destroy_image(world->mlx.ptr, world->texture_sprite.ptr);
-	free_levels(world);
+	write(1, "caca\n", 5);
+	if (world->texture_gun.data)
+		mlx_destroy_image(world->mlx.ptr, world->texture_gun.ptr);
+	write(1, "caca\n", 5);
 	free_textures(world);
 	free_map(world);
 	if (world->mlx.win)
 		mlx_destroy_window(world->mlx.ptr, world->mlx.win);
 	free(world);
 	write(1, "caca\n", 5);
-	if (world->music_file)
-		system("killall afplay");
+	system("killall afplay");
 }

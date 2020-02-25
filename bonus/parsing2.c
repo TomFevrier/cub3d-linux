@@ -29,7 +29,7 @@ void	parsing_error(t_world *world, char *message, int line_nb)
 	}
 	write(1, "\n", 1);
 	close(world->fd);
-	free_all(world);
+	free_world(world);
 	exit(ERROR);
 }
 

@@ -25,7 +25,7 @@ void	free_textures(t_world *world)
 	}
 }
 
-void	free_all(t_world *world)
+void	free_world(t_world *world)
 {
 	int		i;
 
@@ -54,7 +54,7 @@ int		key_pressed(int key, t_world *world)
 {
 	if (key == KEY_ESC)
 	{
-		free_all(world);
+		free_world(world);
 		exit(SUCCESS);
 	}
 	else if (key == KEY_A)
@@ -91,6 +91,6 @@ int		key_released(int key, t_world *world)
 
 int		quit(t_world *world)
 {
-	free_all(world);
+	free_world(world);
 	exit(SUCCESS);
 }

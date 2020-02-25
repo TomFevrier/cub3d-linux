@@ -31,7 +31,7 @@ void	parsing_error(t_world *world, char *message, int line_nb)
 	close(world->fd);
 	if (world->raw_map)
 		free(world->raw_map);
-	free_all(world);
+	free_world(world);
 	exit(ERROR);
 }
 

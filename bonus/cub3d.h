@@ -34,13 +34,14 @@
 # define KEY_S 1
 # define KEY_D 2
 # define KEY_W 13
+# define KEY_ENTER 36
+# define KEY_SPACE 49
 # define KEY_ESC 53
+# define KEY_F10 109
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define KEY_UP 126
 # define KEY_DOWN 125
-# define KEY_ENTER 36
-# define KEY_F10 109
+# define KEY_UP 126
 
 typedef int			t_bool;
 
@@ -93,6 +94,7 @@ typedef struct		s_ctrls
 	t_bool	right;
 	t_bool	up;
 	t_bool	down;
+	t_bool	space;
 }					t_ctrls;
 
 typedef struct		s_img
@@ -110,15 +112,25 @@ typedef struct		s_sprite
 {
 	int		pos[2];
 	double	distance;
+	t_bool	killable;
+	t_bool	destroyed;
 	t_img	texture;
 }					t_sprite;
+
+typedef struct		s_menu
+{
+	t_mlx			mlx;
+	int				scr_width;
+	int				scr_height;
+	int				nb_levels;
+	char			**levels;
+	int				selected_level;
+}					t_menu;
 
 typedef struct		s_world
 {
 	t_mlx			mlx;
-	int				nb_levels;
-	char			**levels;
-	int				selected_level;
+	t_menu			*menu;
 	int				fd;
 	int				scr_width;
 	int				scr_height;
@@ -131,6 +143,7 @@ typedef struct		s_world
 	t_img			texture_floor;
 	t_img			texture_sky;
 	t_img			texture_sprite;
+	t_img			texture_gun;
 	int				nb_sprites;
 	t_sprite		*sprites;
 	t_img			screen;
@@ -152,14 +165,13 @@ typedef struct		s_world
 	int				screenshot_index;
 }					t_world;
 
-void				init_menu(t_world *world, char *folder);
-void				draw_menu(t_world *world);
-void				fill_screen(t_world *world, int color);
+t_menu				*menu_init(int width, int height, char *folder);
+void				draw_menu(t_menu *menu);
 
-t_bool				launch_menu(void);
-t_bool				launch_level(char *filename);
+t_bool				launch_menu(t_menu *menu);
+t_bool				launch_level(char *filename, t_menu *menu);
 
-t_world				*world_init(char *filename);
+t_world				*world_init(char *filename, t_menu *menu);
 
 t_bool				init_other_stuff(t_world *world);
 t_bool				screen_init(t_world *world);
@@ -186,18 +198,18 @@ void				draw_minimap(t_world *world, int offset_x, int offset_y,
 					int width);
 void				draw_life(t_world *world, int offset_x, int offset_y,
 					int width);
-void				write_text(t_world *world, int pos[2], char *text,
-					int color);
+void				draw_gun(t_world *world);
+void				write_text(t_mlx mlx, int pos[2], char *text, int color);
 
-void				free_all(t_world *world);
 int					key_pressed(int key, t_world *world);
-int					key_pressed_menu(int key, t_world *world);
+int					key_pressed_menu(int key, t_menu *menu);
 int					key_released(int key, t_world *world);
-int					quit(t_world *world);
+int					quit(t_menu *menu);
 
 t_bool				move(t_world *world);
 t_bool				rotate(t_world *world);
 t_bool				jump(t_world *world);
+t_bool				shoot(t_world *world);
 
 int					ft_strlen(char *str);
 int					ft_indexof(char *str, char c);
@@ -218,6 +230,7 @@ void				write_bmp_header(t_world *world);
 void				flip_pixels(t_world *world);
 void				save_screenshot(t_world *world);
 
-void				free_all(t_world *world);
+void				free_world(t_world *world);
+void				free_menu(t_menu *menu);
 
 #endif
