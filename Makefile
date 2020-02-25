@@ -18,6 +18,7 @@ SRCS =		srcs/cub3d.c \
 			get_next_line/get_next_line_utils.c
 
 BONUS =		bonus/cub3d.c \
+			bonus/menu.c \
 			bonus/init1.c \
 			bonus/init2.c \
 			bonus/parsing1.c \
@@ -32,6 +33,7 @@ BONUS =		bonus/cub3d.c \
 			bonus/utils_strings.c \
 			bonus/utils_pixels.c \
 			bonus/utils_bmp.c \
+			bonus/free.c \
 			get_next_line/get_next_line.c \
 			get_next_line/get_next_line_utils.c
 
@@ -60,9 +62,9 @@ bonus:
 			gcc $(FLAGS) -I $(INC) -g -L $(LIB) -l mlx $(GFX_FLAGS) $(BONUS) -o $(NAME)_bonus
 
 run:		re
-			./$(NAME) /levels/test.cub
+			./$(NAME) /levels/garden.cub
 
 run_save:	re
-			./$(NAME) /levels/test.cub --save
+			./$(NAME) /levels/garden.cub --save
 
 .PHONY:		all clean fclean re bonus

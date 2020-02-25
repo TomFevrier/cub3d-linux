@@ -75,16 +75,8 @@ char	*ft_remove_spaces(char *str)
 	return (new_str);
 }
 
-int		char_in_str(char c, char *str)
+char	*format_name(char *filename)
 {
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (c == str[i])
-			return (i);
-		i++;
-	}
-	return (-1);
+	*(filename + ft_strlen(filename) - 10) = '\0';
+	return (filename);
 }

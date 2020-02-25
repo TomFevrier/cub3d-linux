@@ -12,10 +12,14 @@
 
 #include "cub3d.h"
 
-void	write_text(t_world *world, int x, int y, char *text)
+void	write_text(t_world *world, int pos[2], char *text, int color)
 {
-	x -= ft_strlen(text) * 5;
-	mlx_string_put(world->mlx.ptr, world->mlx.win, x, y, 0xFFFFFF, text);
+	int		x;
+	int		y;
+
+	x = pos[0] - ft_strlen(text) * 5;
+	y = pos[1];
+	mlx_string_put(world->mlx.ptr, world->mlx.win, x, y, color, text);
 }
 
 void	draw_square(t_world *world, int x, int y, int cell)

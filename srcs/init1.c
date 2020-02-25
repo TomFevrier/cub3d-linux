@@ -120,6 +120,7 @@ t_world	*world_init(int argc, char **argv)
 		parsing_error(world, "File is invalid: should have extension .cub", 0);
 	if ((world->fd = open(argv[1], O_RDONLY)) < 0)
 		parsing_error(world, "File does not exist", 0);
+	world->scr_width = 0;
 	read_file(world);
 	close(world->fd);
 	if (!parse_map(world))

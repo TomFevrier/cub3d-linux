@@ -18,11 +18,11 @@ void	map_init(t_world *world)
 	int		j;
 
 	world->nb_sprites = 0;
-	world->map = malloc(world->map_height * sizeof(int *));
+	world->map = calloc(world->map_height, sizeof(int *));
 	i = 0;
 	while (i < world->map_height)
 	{
-		world->map[i] = malloc(world->map_width * sizeof(int));
+		world->map[i] = calloc(world->map_width, sizeof(int));
 		j = 0;
 		while (j < world->map_width)
 		{
@@ -64,7 +64,7 @@ t_bool	sprites_init(t_world *world)
 	int		j;
 	int		index;
 
-	if (!(world->sprites = malloc(world->nb_sprites * sizeof(t_sprite))))
+	if (!(world->sprites = calloc(world->nb_sprites, sizeof(t_sprite))))
 		return (FALSE);
 	index = 0;
 	i = 0;
@@ -106,20 +106,17 @@ void	read_file(t_world *world)
 		parsing_error(world, "File is corrupted", 0);
 }
 
-t_world	*world_init(int argc, char **argv)
+t_world	*world_init(char *filename)
 {
 	t_world	*world;
 
-	if (!(world = (t_world *)malloc(sizeof(t_world))))
+	if (!(world = (t_world *)calloc(1, sizeof(t_world))))
 		return (NULL);
 	if (!(world->mlx.ptr = mlx_init()))
 		return (NULL);
-	if (argc < 2)
-		parsing_error(world, "No scene file specified", 0);
-	if (ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub") != 0)
-		parsing_error(world, "File is invalid: should have extension .cub", 0);
-	if ((world->fd = open(argv[1], O_RDONLY)) < 0)
-		parsing_error(world, "File does not exist", 0);
+	world->levels = NULL;
+	world->resolution_defined = FALSE;
+	world->fd = open(filename, O_RDONLY);
 	read_file(world);
 	close(world->fd);
 	if (!parse_map(world))
@@ -128,7 +125,6 @@ t_world	*world_init(int argc, char **argv)
 	cam_init(world);
 	if (!sprites_init(world))
 		return (NULL);
-	world->save = (argc > 2) && (ft_strcmp(argv[2], "--save") == 0);
 	if (!init_other_stuff(world))
 		return (NULL);
 	return (world);

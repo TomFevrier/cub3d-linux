@@ -21,7 +21,7 @@
 # include <unistd.h>
 # include <math.h>
 # include <mlx.h>
-# include <signal.h>
+# include <dirent.h>
 
 # include "../get_next_line/get_next_line.h"
 
@@ -39,6 +39,7 @@
 # define KEY_RIGHT 124
 # define KEY_UP 126
 # define KEY_DOWN 125
+# define KEY_ENTER 36
 # define KEY_F10 109
 
 typedef int			t_bool;
@@ -115,6 +116,9 @@ typedef struct		s_sprite
 typedef struct		s_world
 {
 	t_mlx			mlx;
+	int				nb_levels;
+	char			**levels;
+	int				selected_level;
 	int				fd;
 	int				scr_width;
 	int				scr_height;
@@ -148,9 +152,17 @@ typedef struct		s_world
 	int				screenshot_index;
 }					t_world;
 
-t_world				*world_init(int argc, char **argv);
+void				init_menu(t_world *world, char *folder);
+void				draw_menu(t_world *world);
+void				fill_screen(t_world *world, int color);
+
+t_bool				launch_menu(void);
+t_bool				launch_level(char *filename);
+
+t_world				*world_init(char *filename);
 
 t_bool				init_other_stuff(t_world *world);
+t_bool				screen_init(t_world *world);
 
 void				parse_line(t_world *world, char *line, int line_nb,
 					int res);
@@ -174,10 +186,12 @@ void				draw_minimap(t_world *world, int offset_x, int offset_y,
 					int width);
 void				draw_life(t_world *world, int offset_x, int offset_y,
 					int width);
-void				write_text(t_world *world, int x, int y, char *text);
+void				write_text(t_world *world, int pos[2], char *text,
+					int color);
 
 void				free_all(t_world *world);
 int					key_pressed(int key, t_world *world);
+int					key_pressed_menu(int key, t_world *world);
 int					key_released(int key, t_world *world);
 int					quit(t_world *world);
 
@@ -191,6 +205,7 @@ int					ft_strcmp(char *s1, char *s2);
 int					ft_atoi_easy(char *str);
 char				*ft_trim(char *str);
 char				*ft_remove_spaces(char *str);
+char				*format_name(char *filename);
 
 void				set_screen_pixel(t_img screen, int i, int j, int color);
 int					get_screen_pixel(t_img screen, int i, int j);
@@ -202,5 +217,7 @@ void				number_to_mem(char *dest, int nb, int nb_bytes);
 void				write_bmp_header(t_world *world);
 void				flip_pixels(t_world *world);
 void				save_screenshot(t_world *world);
+
+void				free_all(t_world *world);
 
 #endif

@@ -73,6 +73,7 @@ void	flip_pixels(t_world *world)
 void	save_screenshot(t_world *world)
 {
 	static char	filename[18] = "screenshot_00.bmp";
+	int			pos[2];
 
 	filename[11] = '0' + world->screenshot_index / 10;
 	filename[12] = '0' + world->screenshot_index % 10;
@@ -83,5 +84,7 @@ void	save_screenshot(t_world *world)
 	close(world->fd_save);
 	world->save = FALSE;
 	world->screenshot_index = (world->screenshot_index + 1) % 100;
-	write_text(world, world->scr_width / 2, 10, "Screenshot saved!");
+	pos[0] = world->scr_width / 2;
+	pos[1] = 10;
+	write_text(world, pos, "Screenshot saved!", 0xFFFFFF);
 }

@@ -12,53 +12,13 @@
 
 #include "cub3d.h"
 
-void	free_textures(t_world *world)
-{
-	t_side	side;
-
-	side = N;
-	while (side < E)
-	{
-		if (world->textures[side].data)
-			mlx_destroy_image(world->mlx.ptr, world->textures[side].ptr);
-		side++;
-	}
-}
-
-void	free_all(t_world *world)
-{
-	int		i;
-
-	if (world->map)
-	{
-		i = 0;
-		while (i < world->map_height)
-			free(world->map[i++]);
-		free(world->map);
-	}
-	if (world->sprites)
-		free(world->sprites);
-	if (world->depth_buffer)
-		free(world->depth_buffer);
-	if (world->music_file)
-		free(world->music_file);
-	if (world->screen.data)
-		mlx_destroy_image(world->mlx.ptr, world->screen.ptr);
-	if (world->texture_sprite.data)
-		mlx_destroy_image(world->mlx.ptr, world->texture_sprite.ptr);
-	free_textures(world);
-	if (world->mlx.win)
-		mlx_destroy_window(world->mlx.ptr, world->mlx.win);
-	free(world);
-	kill(0, SIGTERM);
-}
-
-int		key_pressed(int key, t_world *world)
+t_bool	key_pressed(int key, t_world *world)
 {
 	if (key == KEY_ESC)
 	{
 		free_all(world);
-		exit(SUCCESS);
+		write(1, "free done\n", 10);
+		launch_menu();
 	}
 	else if (key == KEY_A)
 		world->ctrls.a = TRUE;
@@ -81,7 +41,34 @@ int		key_pressed(int key, t_world *world)
 	return (TRUE);
 }
 
-int		key_released(int key, t_world *world)
+t_bool	key_pressed_menu(int key, t_world *world)
+{
+	char	*filename;
+
+	if (key == KEY_ESC)
+	{
+		free_all(world);
+		exit(SUCCESS);
+	}
+	else if (key == KEY_UP)
+		world->selected_level = (world->nb_levels
+		+ (world->selected_level - 1)) % world->nb_levels;
+	else if (key == KEY_DOWN)
+		world->selected_level = (world->selected_level + 1) % world->nb_levels;
+	if (key == KEY_UP || key == KEY_DOWN)
+		draw_menu(world);
+	if (key == KEY_ENTER)
+	{
+		filename = ft_strjoin("./levels/",
+			world->levels[world->selected_level]);
+		free_all(world);
+		if (!launch_level(filename))
+			exit(ERROR);
+	}
+	return (TRUE);
+}
+
+t_bool	key_released(int key, t_world *world)
 {
 	if (key == KEY_A)
 		world->ctrls.a = FALSE;
@@ -102,7 +89,7 @@ int		key_released(int key, t_world *world)
 	return (TRUE);
 }
 
-int		quit(t_world *world)
+t_bool	quit(t_world *world)
 {
 	free_all(world);
 	exit(SUCCESS);

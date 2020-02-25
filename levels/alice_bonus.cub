@@ -3,7 +3,7 @@ NO ./textures/alice.xpm
 SO ./textures/alice.xpm
 WE ./textures/alice.xpm
 EA ./textures/alice.xpm
-S ./sprites/alice.xpm
+S ./textures/alice.xpm
 SK ./textures/alice.xpm
 F ./textures/alice.xpm
 M ./music/great_wall.mp3
