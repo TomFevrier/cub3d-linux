@@ -125,4 +125,5 @@ void	draw_gun(t_world *world, t_bool shooting)
 		world->gun_dir = FALSE;
 	else if (world->gun_shift > 0.05 * world->scr_height)
 		world->gun_dir = TRUE;
+	world->gun_shift = (world->gun_shift < 0) ? 0 : world->gun_shift;
 }
