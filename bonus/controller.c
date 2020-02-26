@@ -96,7 +96,10 @@ t_bool	key_released(int key, t_world *world)
 	else if (key == KEY_DOWN)
 		world->ctrls.down = FALSE;
 	else if (key == KEY_SPACE)
+	{
 		world->ctrls.space = FALSE;
+		draw(world);
+	}
 	return (TRUE);
 }
 

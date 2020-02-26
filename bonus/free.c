@@ -52,7 +52,6 @@ void	free_map(t_world *world)
 
 void	free_world(t_world *world)
 {
-	write(1, "caca\n", 5);
 	if (world->sprites)
 		free(world->sprites);
 	if (world->depth_buffer)
@@ -63,15 +62,14 @@ void	free_world(t_world *world)
 		mlx_destroy_image(world->mlx.ptr, world->screen.ptr);
 	if (world->texture_sprite.data)
 		mlx_destroy_image(world->mlx.ptr, world->texture_sprite.ptr);
-	write(1, "caca\n", 5);
-	if (world->texture_gun.data)
-		mlx_destroy_image(world->mlx.ptr, world->texture_gun.ptr);
-	write(1, "caca\n", 5);
+	if (world->textures_gun[0].data)
+		mlx_destroy_image(world->mlx.ptr, world->textures_gun[0].ptr);
+	if (world->textures_gun[1].data)
+		mlx_destroy_image(world->mlx.ptr, world->textures_gun[1].ptr);
 	free_textures(world);
 	free_map(world);
 	if (world->mlx.win)
 		mlx_destroy_window(world->mlx.ptr, world->mlx.win);
 	free(world);
-	write(1, "caca\n", 5);
 	system("killall afplay");
 }

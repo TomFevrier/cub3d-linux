@@ -124,7 +124,10 @@ t_world	*world_init(char *filename, t_menu *menu)
 	cam_init(world);
 	if (!sprites_init(world))
 		return (NULL);
-	load_texture(world, &(world->texture_gun), "./sprites/gun.xpm");
+	load_texture(world, &(world->textures_gun[0]), "./sprites/gun.xpm");
+	load_texture(world, &(world->textures_gun[1]),
+		"./sprites/gun_shooting.xpm");
+	world->gun_shift = 0;
 	if (!init_other_stuff(world))
 		return (NULL);
 	return (world);

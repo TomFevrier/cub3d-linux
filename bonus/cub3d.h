@@ -143,7 +143,6 @@ typedef struct		s_world
 	t_img			texture_floor;
 	t_img			texture_sky;
 	t_img			texture_sprite;
-	t_img			texture_gun;
 	int				nb_sprites;
 	t_sprite		*sprites;
 	t_img			screen;
@@ -151,6 +150,9 @@ typedef struct		s_world
 	double			jump_coeff;
 	double			jump_speed;
 	int				life;
+	t_img			textures_gun[2];
+	int				gun_shift;
+	t_bool			gun_dir;
 	int				nb_pixels;
 	double			*depth_buffer;
 	int				minimap_unit;
@@ -158,11 +160,12 @@ typedef struct		s_world
 	double			dir[2];
 	double			cam_plane[2];
 	t_side			cam_dir;
-	t_bool			game_over;
 	char			*music_file;
 	t_bool			save;
 	int				fd_save;
 	int				screenshot_index;
+	t_bool			game_over;
+	t_bool			won;
 }					t_world;
 
 t_menu				*menu_init(int width, int height, char *folder);
@@ -188,6 +191,8 @@ t_bool				check_map(t_world *world);
 t_bool				check_map_row(t_world *world, int i, int j,
 					t_bool cam_parsed);
 
+t_bool				game_loop(t_world *world);
+
 void				draw(t_world *world);
 
 void				run_dda(t_world *world, int i, double ray[2]);
@@ -198,7 +203,7 @@ void				draw_minimap(t_world *world, int offset_x, int offset_y,
 					int width);
 void				draw_life(t_world *world, int offset_x, int offset_y,
 					int width);
-void				draw_gun(t_world *world);
+void				draw_gun(t_world *world, t_bool shooting);
 void				write_text(t_mlx mlx, int pos[2], char *text, int color);
 
 int					key_pressed(int key, t_world *world);
@@ -221,7 +226,7 @@ char				*format_name(char *filename);
 
 void				set_screen_pixel(t_img screen, int i, int j, int color);
 int					get_screen_pixel(t_img screen, int i, int j);
-int					get_tex_color(t_img tex, double u, double v);
+int					get_tex_color(t_img tex, double u, double v, double darken);
 t_bool				load_texture(t_world *world, t_img *texture,
 					char *filename);
 

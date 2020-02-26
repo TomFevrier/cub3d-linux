@@ -15,6 +15,7 @@
 void	parsing_error(t_world *world, char *message, int line_nb)
 {
 	char	c;
+	t_menu	*menu;
 
 	write(1, "Error\n", 6);
 	write(1, message, ft_strlen(message));
@@ -29,8 +30,9 @@ void	parsing_error(t_world *world, char *message, int line_nb)
 	}
 	write(1, "\n", 1);
 	close(world->fd);
+	menu = world->menu;
 	free_world(world);
-	exit(ERROR);
+	launch_menu(menu);
 }
 
 void	parse_map_row(t_world *world, int i)

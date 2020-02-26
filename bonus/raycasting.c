@@ -12,6 +12,16 @@
 
 #include "cub3d.h"
 
+void	draw_sky_pixel(t_world *world, int i, int j)
+{
+	int		color;
+
+	color = get_tex_color(world->texture_sky,
+		(i % world->texture_sky.width) * 1.0 / world->texture_sky.width,
+		(j % world->texture_sky.height) * 1.0 / world->texture_sky.height, 1);
+	set_screen_pixel(world->screen, i, j, color);
+}
+
 void	draw_line_textured(t_world *world, int i, t_texdata data)
 {
 	int		j;
@@ -27,16 +37,12 @@ void	draw_line_textured(t_world *world, int i, t_texdata data)
 	texture = world->textures[data.side];
 	j = 0;
 	while (j < (start < 0 ? 0 : start))
-	{
-		color = get_tex_color(world->texture_sky,
-			(i % world->texture_sky.width) * 1.0 / world->texture_sky.width,
-			(j % world->texture_sky.height) * 1.0 / world->texture_sky.height);
-		set_screen_pixel(world->screen, i, j++, color);
-	}
+		draw_sky_pixel(world, i, j++);
 	while (j < (end >= world->scr_height ? world->scr_height - 1 : end))
 	{
 		color = get_tex_color(texture, data.wall_x,
-			((j - start) * 1.0) / (end - start));
+			((j - start) * 1.0) / (end - start),
+			(data.line_height * 3.0 / world->scr_height));
 		set_screen_pixel(world->screen, i, j++, color);
 	}
 }

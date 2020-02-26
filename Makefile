@@ -24,6 +24,7 @@ BONUS =		bonus/cub3d.c \
 			bonus/parsing1.c \
 			bonus/parsing2.c \
 			bonus/checks.c \
+			bonus/game.c \
 			bonus/draw.c \
 			bonus/raycasting.c \
 			bonus/display.c \
@@ -62,9 +63,9 @@ bonus:
 			gcc $(FLAGS) -I $(INC) -g -L $(LIB) -l mlx $(GFX_FLAGS) $(BONUS) -o $(NAME)_bonus
 
 run:		re
-			./$(NAME) /levels/garden.cub
+			./$(NAME) ./levels/garden.cub
 
 run_save:	re
-			./$(NAME) /levels/garden.cub --save
+			./$(NAME) ./levels/garden.cub --save
 
 .PHONY:		all clean fclean re bonus

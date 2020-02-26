@@ -12,36 +12,6 @@
 
 #include "cub3d.h"
 
-void	game_over(t_world *world)
-{
-	int		pos[2];
-
-	pos[0] = world->scr_width / 2;
-	pos[1] = world->scr_height / 2 - 20;
-	write_text(world->mlx, pos, "GAME OVER", 0x9FFFFF);
-	pos[1] += 20;
-	write_text(world->mlx, pos, "Press ECHAP to return to the main menu",
-		0xFFFFFF);
-	world->game_over = TRUE;
-}
-
-t_bool	game_loop(t_world *world)
-{
-	t_bool	should_draw;
-
-	if (world->game_over)
-		return (TRUE);
-	should_draw = move(world);
-	should_draw = rotate(world) || should_draw;
-	should_draw = jump(world) || should_draw;
-	should_draw = shoot(world) || should_draw;
-	if (should_draw)
-		draw(world);
-	if (world->life <= 0)
-		game_over(world);
-	return (TRUE);
-}
-
 t_bool	launch_level(char *filename, t_menu *menu)
 {
 	t_world		*world;

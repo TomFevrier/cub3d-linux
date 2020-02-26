@@ -31,7 +31,8 @@ void	draw_row_floor(t_world *world, int j, double left[2], double right[2])
 	{
 		color = get_tex_color(world->texture_floor,
 			floor_pos[0] - floor(floor_pos[0]),
-			floor_pos[1] - floor(floor_pos[1]));
+			floor_pos[1] - floor(floor_pos[1]),
+			((j - world->scr_height / 2) * 3.0 / world->scr_height));
 		set_screen_pixel(world->screen, i++, j, color);
 		floor_pos[0] += step[0];
 		floor_pos[1] += step[1];
@@ -84,7 +85,7 @@ void	draw(t_world *world)
 	{
 		draw_minimap(world, 20, 20, 100);
 		draw_life(world, -20, 20, 200);
-		draw_gun(world);
+		draw_gun(world, world->ctrls.space);
 		mlx_put_image_to_window(world->mlx.ptr, world->mlx.win,
 			world->screen.ptr, 0, 0);
 	}

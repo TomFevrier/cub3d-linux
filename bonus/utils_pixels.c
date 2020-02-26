@@ -25,45 +25,50 @@ t_bool	load_texture(t_world *world, t_img *texture, char *filename)
 
 void	set_screen_pixel(t_img screen, int i, int j, int color)
 {
-	char	*ptr;
-	char	r;
-	char	g;
-	char	b;
+	char			*ptr;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+	unsigned char	a;
 
-	r = color >> 16;
-	g = (color % 65536) >> 8;
-	b = color % 256;
+	r = (unsigned char)(color >> 16);
+	g = (unsigned char)((color % 65536) >> 8);
+	b = (unsigned char)(color % 256);
+	a = (unsigned char)(color >> 24);
 	ptr = screen.data + j * screen.size_line + i * (screen.bpp >> 3);
-	*ptr = (screen.endian) ? r : b;
+	*ptr = screen.endian ? r : b;
 	*(ptr + 1) = g;
-	*(ptr + 2) = (screen.endian) ? b : r;
+	*(ptr + 2) = screen.endian ? b : r;
+	*(ptr + 3) = a;
 }
 
 int		get_screen_pixel(t_img screen, int i, int j)
 {
-	char	*ptr;
-	char	r;
-	char	g;
-	char	b;
+	char			*ptr;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
 
 	ptr = screen.data + j * screen.size_line + i * (screen.bpp >> 3);
-	r = (screen.endian) ? *ptr : *(ptr + 2);
-	g = *(ptr + 1);
-	b = (screen.endian) ? *(ptr + 2) : *ptr;
+	r = (unsigned char)(screen.endian ? *ptr : *(ptr + 2));
+	g = (unsigned char)(*(ptr + 1));
+	b = (unsigned char)(screen.endian ? *(ptr + 2) : *ptr);
 	return ((r << 16) + (g << 8) + b);
 }
 
-int		get_tex_color(t_img tex, double u, double v)
+int		get_tex_color(t_img tex, double u, double v, double darken)
 {
-	char	*ptr;
-	char	r;
-	char	g;
-	char	b;
+	char			*ptr;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
 
+	darken = (darken > 1) ? 1 : darken;
+	darken = (darken < 0.4) ? 0.4 : darken;
 	ptr = tex.data + (int)(v * tex.height) * tex.size_line
 		+ (int)(u * tex.width) * (tex.bpp >> 3);
-	r = tex.endian ? *ptr : *(ptr + 2);
-	g = *(ptr + 1);
-	b = tex.endian ? *(ptr + 2) : *ptr;
+	r = darken * (unsigned char)(tex.endian ? *ptr : *(ptr + 2));
+	g = darken * (unsigned char)(*(ptr + 1));
+	b = darken * (unsigned char)(tex.endian ? *(ptr + 2) : *ptr);
 	return ((r << 16) + (g << 8) + b);
 }

@@ -48,7 +48,7 @@ t_bool	rotate(t_world *world)
 
 	if (!world->ctrls.right && !world->ctrls.left)
 		return (FALSE);
-	angle = (world->ctrls.left) ? M_PI / 100 : -M_PI / 100;
+	angle = (world->ctrls.left) ? M_PI / 50 : -M_PI / 50;
 	tmp = world->dir[0];
 	world->dir[0] = tmp * cos(angle) - world->dir[1] * sin(angle);
 	world->dir[1] = tmp * sin(angle) + world->dir[1] * cos(angle);
@@ -90,5 +90,6 @@ t_bool	shoot(t_world *world)
 		}
 		i--;
 	}
+	system("afplay ./music/gunshot.mp3 &");
 	return (TRUE);
 }

@@ -29,7 +29,7 @@ void	draw_square(t_world *world, int x, int y, int cell)
 	int		color;
 
 	if (cell == 0)
-		color = 0xFFFFFF;
+		color = 0x80FFFFFF;
 	else if (cell == 1)
 		color = 0x0000FF;
 	else
@@ -99,7 +99,7 @@ void	draw_life(t_world *world, int offset_x, int offset_y, int width)
 	}
 }
 
-void	draw_gun(t_world *world)
+void	draw_gun(t_world *world, t_bool shooting)
 {
 	int		i;
 	int		j;
@@ -111,13 +111,18 @@ void	draw_gun(t_world *world)
 		j = 0.6 * world->scr_height;
 		while (j < world->scr_height)
 		{
-			color = get_tex_color(world->texture_gun,
+			color = get_tex_color(world->textures_gun[shooting],
 				((i - 0.4 * world->scr_width) / (0.4 * world->scr_width)),
-				((j - 0.6 * world->scr_height) / (0.4 * world->scr_height)));
+				((j - 0.6 * world->scr_height) / (0.4 * world->scr_height)), 1);
 			if (color != 0)
-				set_screen_pixel(world->screen, i, j, color);
+				set_screen_pixel(world->screen, i, j + world->gun_shift, color);
 			j++;
 		}
 		i++;
 	}
+	world->gun_shift = world->gun_shift + (world->gun_dir ? -5 : 5);
+	if (world->gun_shift < 0)
+		world->gun_dir = FALSE;
+	else if (world->gun_shift > 0.05 * world->scr_height)
+		world->gun_dir = TRUE;
 }

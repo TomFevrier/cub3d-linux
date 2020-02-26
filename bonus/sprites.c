@@ -16,12 +16,15 @@ void	compute_distances(t_world *world)
 {
 	int	i;
 
+	world->won = TRUE;
 	i = 0;
 	while (i < world->nb_sprites)
 	{
 		world->sprites[i].distance =
 			pow(world->pos[0] - world->sprites[i].pos[0], 2)
 			+ pow(world->pos[1] - world->sprites[i].pos[1], 2);
+		if (!world->sprites[i].destroyed)
+			world->won = FALSE;
 		i++;
 	}
 }
@@ -67,7 +70,8 @@ void	draw_line_sprite(t_world *world, t_spritedata data, int i,
 	{
 		color = get_tex_color(world->sprites[data.index].texture,
 			((i - bbox_x[0]) * 1.0) / (bbox_x[1] - bbox_x[0]),
-			((j - bbox_y[0]) * 1.0) / (bbox_y[1] - bbox_y[0]));
+			((j - bbox_y[0]) * 1.0) / (bbox_y[1] - bbox_y[0]),
+			((bbox_x[1] - bbox_x[0]) * 3.0 / world->scr_height));
 		if (color != 0)
 			set_screen_pixel(world->screen, i, j, color);
 		j++;
