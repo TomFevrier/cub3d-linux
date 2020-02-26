@@ -1,2 +1,5 @@
 .DS_Store
 *.dSYM/*
+Cub3D
+Cub3D_bonus
+*.bmp
