@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tfevrier <tfevrier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,27 +12,51 @@
 
 #include "cub3d.h"
 
-void	parsing_error(t_world *world, char *message, int line_nb)
+void	map_cell_init(t_world *world, int i, int j, t_bool *cam_parsed)
 {
-	char	c;
-
-	write(1, "Error\n", 6);
-	write(1, message, ft_strlen(message));
-	if (line_nb > 0)
+	if (j >= ft_strlen(world->char_map[i]) || world->char_map[i][j] <= ' ')
+		world->map[i][j] = -1;
+	else if (ft_indexof("0123", world->char_map[i][j]) >= 0)
+		world->map[i][j] = world->char_map[i][j] - '0';
+	else if (ft_indexof("NWSE", world->char_map[i][j]) >= 0)
 	{
-		write(1, " on line ", 9);
-		c = line_nb / 10 + '0';
-		if (c != '0')
-			write(1, &c, 1);
-		c = line_nb % 10 + '0';
-		write(1, &c, 1);
+		if (*cam_parsed)
+			parsing_error(world, "Map must only contain one player", 0);
+		else
+		{
+			world->cam_dir = ft_indexof("NWSE", world->map[i][j]);
+			world->map[i][j] = 0;
+			world->pos[0] = i;
+			world->pos[1] = j;
+			*cam_parsed = TRUE;
+		}
 	}
-	write(1, "\n", 1);
-	close(world->fd);
-	if (world->raw_map)
-		free(world->raw_map);
-	free_world(world);
-	exit(ERROR);
+	if (world->map[i][j] >= 2)
+		world->nb_sprites++;
+}
+
+void	map_init(t_world *world)
+{
+	int		i;
+	int		j;
+	t_bool	cam_parsed;
+
+	cam_parsed = FALSE;
+	world->nb_sprites = 0;
+	world->map = ft_calloc(world->map_height, sizeof(int *));
+	i = 0;
+	while (i < world->map_height)
+	{
+		world->map[i] = ft_calloc(world->map_width, sizeof(int));
+		j = 0;
+		while (j < world->map_width)
+			map_cell_init(world, i, j++, &cam_parsed);
+		free(world->char_map[i]);
+		i++;
+	}
+	if (!cam_parsed)
+		parsing_error(world, "Player position is not defined", 0);
+	free(world->char_map);
 }
 
 void	parse_map_row(t_world *world, int i)
@@ -44,6 +68,13 @@ void	parse_map_row(t_world *world, int i)
 		j++;
 	world->char_map[i] = ft_substr(world->raw_map, 0, j);
 	world->raw_map += j + 1;
+	j = 0;
+	while (world->char_map[i][j])
+	{
+		if (ft_indexof(" 0123NWSE", world->char_map[i][j]) < 0)
+			parsing_error(world, "Map contains invalid characters", 0);
+		j++;
+	}
 	if (ft_strlen(world->char_map[i]) > world->map_width)
 		world->map_width = ft_strlen(world->char_map[i]);
 }
@@ -61,7 +92,7 @@ t_bool	parse_map(t_world *world)
 			world->map_height++;
 		i++;
 	}
-	if (!(world->char_map = malloc(world->map_height * sizeof(char *))))
+	if (!(world->char_map = ft_calloc(world->map_height, sizeof(char *))))
 		return (FALSE);
 	ptr = world->raw_map;
 	i = 0;
@@ -69,8 +100,10 @@ t_bool	parse_map(t_world *world)
 	while (i < world->map_height)
 		parse_map_row(world, i++);
 	free(ptr);
-	if (!check_map(world))
-		parsing_error(world, "Map is invalid", 0);
+	map_init(world);
+	check_map(world);
+	if (world->error)
+		quit(world, ERROR);
 	return (TRUE);
 }
 
@@ -79,7 +112,7 @@ void	read_map_row(t_world *world, char *ptr)
 	char	*tmp;
 
 	check_missing(world);
-	ptr = ft_remove_spaces(ptr);
+	ptr = ft_trim(ptr);
 	if (!world->raw_map)
 		world->raw_map = ft_strdup(ptr);
 	else
@@ -91,5 +124,4 @@ void	read_map_row(t_world *world, char *ptr)
 	tmp = world->raw_map;
 	world->raw_map = ft_strjoin(world->raw_map, "\n");
 	free(tmp);
-	free(ptr);
 }

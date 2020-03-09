@@ -90,6 +90,8 @@ void	run_dda(t_world *world, int i, double ray[2])
 		? world->pos[1] + data.wall_dist * ray[1]
 		: world->pos[0] + data.wall_dist * ray[0];
 	data.wall_x -= floor(data.wall_x);
-	data.line_height = world->scr_height / data.wall_dist;
+	data.line_height = (data.wall_dist > 0)
+		? world->scr_height / data.wall_dist
+		: 2147483647;
 	draw_line_textured(world, i, data);
 }

@@ -23,7 +23,7 @@ void	compute_distances(t_world *world)
 		world->sprites[i].distance =
 			pow(world->pos[0] - world->sprites[i].pos[0], 2)
 			+ pow(world->pos[1] - world->sprites[i].pos[1], 2);
-		if (!world->sprites[i].is_portal && !world->sprites[i].destroyed)
+		if (!world->sprites[i].destroyed)
 			world->won = FALSE;
 		i++;
 	}
@@ -85,14 +85,15 @@ void	draw_sprite(t_world *world, t_spritedata data)
 
 	bbox_x[0] = data.sprite_x - data.sprite_size / 2;
 	bbox_x[1] = data.sprite_x + data.sprite_size / 2;
-	world->sprites[data.index].killable = !world->sprites[data.index].is_portal
-		&& bbox_x[0] < world->scr_width / 2 && bbox_x[1] > world->scr_width / 2
+	world->sprites[data.index].killable =
+		bbox_x[0] < world->scr_width / 2 && bbox_x[1] > world->scr_width / 2
 		&& data.transform[1] < 2;
 	i = (bbox_x[0] < 0) ? 0 : bbox_x[0];
 	while (i <= (bbox_x[1] >= world->scr_width ?
 		world->scr_width - 1 : bbox_x[1]))
 	{
-		if (data.transform[1] > 0 && data.transform[1] < world->depth_buffer[i])
+		if (data.transform[1] > 0 && i > 0
+			&& data.transform[1] < world->depth_buffer[i])
 			draw_line_sprite(world, data, i, bbox_x);
 		i++;
 	}

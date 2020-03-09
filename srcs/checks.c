@@ -12,6 +12,27 @@
 
 #include "cub3d.h"
 
+void	parsing_error(t_world *world, char *message, int line_nb)
+{
+	char	c;
+
+	if (world->error)
+		return ;
+	write(1, "Error\n", 6);
+	write(1, message, ft_strlen(message));
+	if (line_nb > 0)
+	{
+		write(1, " on line ", 9);
+		c = line_nb / 10 + '0';
+		if (c != '0')
+			write(1, &c, 1);
+		c = line_nb % 10 + '0';
+		write(1, &c, 1);
+	}
+	write(1, "\n", 1);
+	world->error = TRUE;
+}
+
 void	check_missing(t_world *world)
 {
 	if (!world->scr_width)
@@ -28,57 +49,35 @@ void	check_missing(t_world *world)
 		parsing_error(world, "South texture must be defined before the map", 0);
 	else if (!world->textures[E].data)
 		parsing_error(world, "East texture must be defined before the map", 0);
+	else if (!world->texture_sprite.data)
+		parsing_error(world, "Sprite texture must be defined before the map",
+		0);
 }
 
-t_bool	check_map_row(t_world *world, int i, int j, t_bool cam_parsed)
+t_bool	check_cell(t_world *world, int i, int j)
 {
-	int		min;
-
-	min = ft_strlen(world->char_map[i - 1])
-		< ft_strlen(world->char_map[i + 1])
-		? ft_strlen(world->char_map[i - 1])
-		: ft_strlen(world->char_map[i + 1]);
-	if ((j == 0 || (j >= min && j < ft_strlen(world->char_map[i]))) &&
-		world->char_map[i][j] != '1')
-		return (FALSE);
-	else if (ft_indexof("012NWSE", world->char_map[i][j]) < 0)
-		return (FALSE);
-	else if (ft_indexof("NWSE", world->char_map[i][j]) >= 0)
-	{
-		if (cam_parsed)
-			return (FALSE);
-		world->cam_dir = ft_indexof("NWSE", world->char_map[i][j]);
-		world->char_map[i][j] = '0';
-		world->pos[0] = i;
-		world->pos[1] = j;
-		cam_parsed = TRUE;
-	}
-	return (TRUE);
+	return (!((i == 0 || j == 0
+		|| i == world->map_height - 1 || j == world->map_width - 1
+		|| world->map[i - 1][j] == -1 || world->map[i + 1][j] == -1
+		|| world->map[i][j - 1] == -1 || world->map[i][j + 1] == -1)
+		&& world->map[i][j] != 1 && world->map[i][j] != -1));
 }
 
-t_bool	check_map(t_world *world)
+void	check_map(t_world *world)
 {
 	int		i;
 	int		j;
-	t_bool	cam_parsed;
 
-	cam_parsed = FALSE;
-	j = 0;
-	while (j < ft_strlen(world->char_map[0]))
-		if (world->char_map[0][j++] != '1')
-			return (FALSE);
-	i = 1;
-	while (i < world->map_height - 1)
+	i = 0;
+	while (i < world->map_height)
 	{
 		j = 0;
-		while (j < ft_strlen(world->char_map[i]))
-			if (!check_map_row(world, i, j++, cam_parsed))
-				return (FALSE);
+		while (j < world->map_width)
+		{
+			if (!check_cell(world, i, j))
+				parsing_error(world, "Map is invalid", 0);
+			j++;
+		}
 		i++;
 	}
-	j = 0;
-	while (j < ft_strlen(world->char_map[world->map_height - 1]))
-		if (world->char_map[world->map_height - 1][j++] != '1')
-			return (FALSE);
-	return (TRUE);
 }

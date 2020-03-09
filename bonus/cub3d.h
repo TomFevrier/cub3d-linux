@@ -112,26 +112,17 @@ typedef struct		s_sprite
 {
 	int		pos[2];
 	double	distance;
+	t_bool	is_portal;
 	t_bool	killable;
 	t_bool	destroyed;
 	t_img	texture;
 }					t_sprite;
 
-typedef struct		s_menu
-{
-	t_mlx			mlx;
-	int				scr_width;
-	int				scr_height;
-	int				nb_levels;
-	char			**levels;
-	int				selected_level;
-}					t_menu;
-
 typedef struct		s_world
 {
 	t_mlx			mlx;
-	t_menu			*menu;
 	int				fd;
+	t_bool			error;
 	int				scr_width;
 	int				scr_height;
 	int				map_width;
@@ -143,6 +134,7 @@ typedef struct		s_world
 	t_img			texture_floor;
 	t_img			texture_sky;
 	t_img			texture_sprite;
+	t_img			texture_portal;
 	int				nb_sprites;
 	t_sprite		*sprites;
 	t_img			screen;
@@ -153,6 +145,7 @@ typedef struct		s_world
 	t_img			textures_gun[2];
 	int				gun_shift;
 	t_bool			gun_dir;
+	t_bool			is_teleporting;
 	int				nb_pixels;
 	double			*depth_buffer;
 	int				minimap_unit;
@@ -168,13 +161,7 @@ typedef struct		s_world
 	t_bool			won;
 }					t_world;
 
-t_menu				*menu_init(int width, int height, char *folder);
-void				draw_menu(t_menu *menu);
-
-t_bool				launch_menu(t_menu *menu);
-t_bool				launch_level(char *filename, t_menu *menu);
-
-t_world				*world_init(char *filename, t_menu *menu);
+t_world				*world_init(int argc, char **argv);
 
 t_bool				init_other_stuff(t_world *world);
 t_bool				screen_init(t_world *world);
@@ -187,9 +174,7 @@ t_bool				parse_map(t_world *world);
 void				read_map_row(t_world *world, char *ptr);
 
 void				check_missing(t_world *world);
-t_bool				check_map(t_world *world);
-t_bool				check_map_row(t_world *world, int i, int j,
-					t_bool cam_parsed);
+void				check_map(t_world *world);
 
 t_bool				game_loop(t_world *world);
 
@@ -207,9 +192,8 @@ void				draw_gun(t_world *world, t_bool shooting);
 void				write_text(t_mlx mlx, int pos[2], char *text, int color);
 
 int					key_pressed(int key, t_world *world);
-int					key_pressed_menu(int key, t_menu *menu);
 int					key_released(int key, t_world *world);
-int					quit(t_menu *menu);
+int					quit(t_world *world, t_bool exit_value);
 
 t_bool				move(t_world *world);
 t_bool				rotate(t_world *world);
@@ -222,7 +206,6 @@ int					ft_strcmp(char *s1, char *s2);
 int					ft_atoi_easy(char *str);
 char				*ft_trim(char *str);
 char				*ft_remove_spaces(char *str);
-char				*format_name(char *filename);
 
 void				set_screen_pixel(t_img screen, int i, int j, int color);
 int					get_screen_pixel(t_img screen, int i, int j);
@@ -235,7 +218,7 @@ void				write_bmp_header(t_world *world);
 void				flip_pixels(t_world *world);
 void				save_screenshot(t_world *world);
 
+void				*ft_calloc(int count, int size);
 void				free_world(t_world *world);
-void				free_menu(t_menu *menu);
 
 #endif

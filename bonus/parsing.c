@@ -35,58 +35,39 @@ void	parse_resolution(t_world *world, char *ptr, int line_nb)
 	free(ptr);
 }
 
-void	parse_color(t_world *world, char *ptr, char c, int line_nb)
+void	parse_texture(t_world *world, char *ptr, t_img *texture, int line_nb)
 {
-	int		color;
-	int		i;
-
-	if (c == 'F' && world->color_floor)
-		parsing_error(world, "Floor color was already defined", line_nb);
-	if (c == 'C' && world->color_ceiling)
-		parsing_error(world, "Ceiling color was already defined", line_nb);
-	i = 0;
-	color = 0;
-	while (i++ < 3)
-	{
-		while (*ptr <= ' ')
-			ptr++;
-		if (*ptr > '9' || *ptr < '0')
-			parsing_error(world, "Color is invalid", line_nb);
-		color = (color << 8) + ft_atoi_easy(ptr);
-		while (*ptr >= '0' && *ptr <= '9')
-			ptr++;
-		(*ptr == ',' || i == 3) ? ptr++
-			: parsing_error(world, "Color is invalid", line_nb);
-	}
-	if (c == 'F')
-		world->color_floor = color;
-	else
-		world->color_ceiling = color;
-}
-
-void	parse_texture(t_world *world, char *ptr, int id, int line_nb)
-{
-	t_img	*texture;
-
-	if (id == 4 && world->texture_sprite.data)
-		parsing_error(world, "Sprite texture was already defined", line_nb);
-	else if (id < 4 && world->textures[id].data)
-		parsing_error(world, "Wall texture was already defined", line_nb);
-	texture = (id < 4) ? &(world->textures[id]) : &(world->texture_sprite);
+	if (texture->data)
+		parsing_error(world, "Texture was already defined", line_nb);
 	while (*ptr <= ' ')
 		ptr++;
 	if (!load_texture(world, texture, ft_trim(ptr)))
 		parsing_error(world, "Texture is invalid", line_nb);
 }
 
-void	parse_empty_line(t_world *world, char *ptr, int line_nb, int res)
+void	parse_other_line(t_world *world, char *line, int line_nb, int res)
 {
-	ptr = ft_remove_spaces(ptr);
-	if (ft_strlen(ptr) > 0)
-		parsing_error(world, "Content is invalid", line_nb);
+	char	*ptr;
+	char	*no_spaces;
+
+	ptr = line;
+	while (*ptr && *ptr <= ' ')
+		ptr++;
+	no_spaces = ft_remove_spaces(line);
+	if (*ptr == 'M')
+	{
+		world->music_file = ft_remove_spaces(ptr + 1);
+		if (access(world->music_file, F_OK) < 0)
+			parsing_error(world, "Music file does not exist", line_nb);
+	}
+	else if (*ptr == 'P')
+		parse_texture(world, ptr + 1, &(world->texture_portal), line_nb);
+	else if (ft_strlen(no_spaces) > 0
+		&& ft_indexof("0123NWSE", *no_spaces) >= 0)
+		read_map_row(world, line);
 	else if (world->raw_map && res > 0)
 		parsing_error(world, "Map contains an empty line", line_nb);
-	free(ptr);
+	free(no_spaces);
 }
 
 void	parse_line(t_world *world, char *line, int line_nb, int res)
@@ -99,19 +80,19 @@ void	parse_line(t_world *world, char *line, int line_nb, int res)
 	if (*ptr == 'R')
 		parse_resolution(world, ptr + 1, line_nb);
 	else if (*ptr == 'N' && *(ptr + 1) == 'O')
-		parse_texture(world, ptr + 2, N, line_nb);
+		parse_texture(world, ptr + 2, &(world->textures[N]), line_nb);
 	else if (*ptr == 'S' && *(ptr + 1) == 'O')
-		parse_texture(world, ptr + 2, S, line_nb);
+		parse_texture(world, ptr + 2, &(world->textures[S]), line_nb);
 	else if (*ptr == 'W' && *(ptr + 1) == 'E')
-		parse_texture(world, ptr + 2, W, line_nb);
+		parse_texture(world, ptr + 2, &(world->textures[W]), line_nb);
 	else if (*ptr == 'E' && *(ptr + 1) == 'A')
-		parse_texture(world, ptr + 2, E, line_nb);
-	else if (*ptr == 'F' || *ptr == 'C')
-		parse_color(world, ptr + 1, *ptr, line_nb);
+		parse_texture(world, ptr + 2, &(world->textures[E]), line_nb);
+	else if (*ptr == 'F')
+		parse_texture(world, ptr + 1, &(world->texture_floor), line_nb);
+	else if (*ptr == 'S' && *(ptr + 1) == 'K')
+		parse_texture(world, ptr + 2, &(world->texture_sky), line_nb);
 	else if (*ptr == 'S')
-		parse_texture(world, ptr + 1, 4, line_nb);
-	else if (ft_indexof("012NWSE", *ptr) >= 0)
-		read_map_row(world, ptr);
+		parse_texture(world, ptr + 1, &(world->texture_sprite), line_nb);
 	else
-		parse_empty_line(world, ptr, line_nb, res);
+		parse_other_line(world, line, line_nb, res);
 }

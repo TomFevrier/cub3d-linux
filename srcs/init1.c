@@ -12,81 +12,6 @@
 
 #include "cub3d.h"
 
-void	map_init(t_world *world)
-{
-	int		i;
-	int		j;
-
-	world->nb_sprites = 0;
-	world->map = malloc(world->map_height * sizeof(int *));
-	i = 0;
-	while (i < world->map_height)
-	{
-		world->map[i] = malloc(world->map_width * sizeof(int));
-		j = 0;
-		while (j < world->map_width)
-		{
-			if (j < ft_strlen(world->char_map[i]))
-				world->map[i][j] = world->char_map[i][j] - '0';
-			else
-				world->map[i][j] = -1;
-			if (world->map[i][j] == 2)
-				world->nb_sprites++;
-			j++;
-		}
-		free(world->char_map[i]);
-		i++;
-	}
-	free(world->char_map);
-}
-
-void	cam_init(t_world *world)
-{
-	if (world->cam_dir == N || world->cam_dir == S)
-	{
-		world->dir[0] = (world->cam_dir == N) ? -1 : 1;
-		world->dir[1] = 0;
-		world->cam_plane[0] = 0;
-		world->cam_plane[1] = (world->cam_dir == N) ? 0.66 : -0.66;
-	}
-	else
-	{
-		world->dir[0] = 0;
-		world->dir[1] = (world->cam_dir == W) ? -1 : 1;
-		world->cam_plane[0] = (world->cam_dir == W) ? -0.66 : 0.66;
-		world->cam_plane[1] = 0;
-	}
-}
-
-t_bool	sprites_init(t_world *world)
-{
-	int		i;
-	int		j;
-	int		index;
-
-	if (!(world->sprites = malloc(world->nb_sprites * sizeof(t_sprite))))
-		return (FALSE);
-	index = 0;
-	i = 0;
-	while (i < world->map_height)
-	{
-		j = 0;
-		while (j < world->map_width)
-		{
-			if (world->map[i][j] == 2)
-			{
-				world->sprites[index].texture = world->texture_sprite;
-				world->sprites[index].pos[0] = i;
-				world->sprites[index].pos[1] = j;
-				index++;
-			}
-			j++;
-		}
-		i++;
-	}
-	return (TRUE);
-}
-
 void	read_file(t_world *world)
 {
 	char	*line;
@@ -104,31 +29,36 @@ void	read_file(t_world *world)
 	}
 	if (res == -1)
 		parsing_error(world, "File is corrupted", 0);
+	close(world->fd);
+	if (!world->raw_map)
+	{
+		parsing_error(world, "Map is not defined", 0);
+		quit(world, ERROR);
+	}
 }
 
 t_world	*world_init(int argc, char **argv)
 {
 	t_world	*world;
 
-	if (!(world = (t_world *)malloc(sizeof(t_world))))
+	if (!(world = (t_world *)ft_calloc(1, sizeof(t_world))))
 		return (NULL);
 	if (!(world->mlx.ptr = mlx_init()))
 		return (NULL);
 	if (argc < 2)
 		parsing_error(world, "No scene file specified", 0);
-	if (ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub") != 0)
+	else if (ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub") != 0)
 		parsing_error(world, "File is invalid: should have extension .cub", 0);
-	if ((world->fd = open(argv[1], O_RDONLY)) < 0)
+	else if ((world->fd = open(argv[1], O_RDONLY)) < 0)
 		parsing_error(world, "File does not exist", 0);
-	world->scr_width = 0;
-	read_file(world);
-	close(world->fd);
-	if (!parse_map(world))
-		return (NULL);
-	map_init(world);
-	cam_init(world);
-	if (!sprites_init(world))
-		return (NULL);
+	else
+		read_file(world);
+	if (world->error)
+	{
+		if (world->raw_map)
+			free(world->raw_map);
+		quit(world, ERROR);
+	}
 	world->save = (argc > 2) && (ft_strcmp(argv[2], "--save") == 0);
 	if (!init_other_stuff(world))
 		return (NULL);

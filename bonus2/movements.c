@@ -12,33 +12,6 @@
 
 #include "cub3d.h"
 
-void	handle_collisions(t_world *world, double dx, double dy)
-{
-	int		alea;
-
-	if (world->map[(int)(world->pos[0] + dx)][(int)(world->pos[1] + dy)] != 1)
-	{
-		world->pos[0] += dx;
-		world->pos[1] += dy;
-		if (world->map[(int)world->pos[0]][(int)world->pos[1]] == 0)
-			world->is_teleporting = FALSE;
-		else if (world->map[(int)world->pos[0]][(int)world->pos[1]] == 2)
-			world->life--;
-		else if (world->map[(int)world->pos[0]][(int)world->pos[1]] == 3
-			&& !world->is_teleporting)
-		{
-			world->is_teleporting = TRUE;
-			alea = rand() % world->nb_sprites;
-			while (!world->sprites[alea].is_portal
-				|| (world->sprites[alea].pos[0] == (int)world->pos[0]
-				&& world->sprites[alea].pos[1] == (int)world->pos[1]))
-				alea = rand() % world->nb_sprites;
-			world->pos[0] = world->sprites[alea].pos[0];
-			world->pos[1] = world->sprites[alea].pos[1];
-		}
-	}
-}
-
 t_bool	move(t_world *world)
 {
 	double	dx;
@@ -58,7 +31,13 @@ t_bool	move(t_world *world)
 		dx = world->cam_plane[0] * (world->ctrls.d ? speed : -speed);
 		dy = world->cam_plane[1] * (world->ctrls.d ? speed : -speed);
 	}
-	handle_collisions(world, dx, dy);
+	if (world->map[(int)(world->pos[0] + dx)][(int)(world->pos[1] + dy)] != 1)
+	{
+		world->pos[0] += dx;
+		world->pos[1] += dy;
+		if (world->map[(int)world->pos[0]][(int)world->pos[1]] == 2)
+			world->life--;
+	}
 	return (TRUE);
 }
 

@@ -24,76 +24,16 @@ t_bool	screen_init(t_world *world)
 	return (TRUE);
 }
 
-void	sprite_init(t_world *world, int index, int i, int j)
-{
-	world->sprites[index].texture = (world->map[i][j] == 2)
-		? world->texture_sprite
-		: world->texture_portal;
-	world->sprites[index].is_portal = (world->map[i][j] == 3);
-	world->sprites[index].pos[0] = i;
-	world->sprites[index].pos[1] = j;
-}
-
-t_bool	sprites_init(t_world *world)
-{
-	int		i;
-	int		j;
-	int		index;
-
-	if (!(world->sprites = ft_calloc(world->nb_sprites, sizeof(t_sprite))))
-		return (FALSE);
-	index = 0;
-	i = 0;
-	while (i < world->map_height)
-	{
-		j = 0;
-		while (j < world->map_width)
-		{
-			if (world->map[i][j] >= 2)
-				sprite_init(world, index++, i, j);
-			j++;
-		}
-		i++;
-	}
-	return (TRUE);
-}
-
-void	cam_init(t_world *world)
-{
-	if (world->cam_dir == N || world->cam_dir == S)
-	{
-		world->dir[0] = 0;
-		world->dir[1] = (world->cam_dir == N) ? 1 : -1;
-		world->cam_plane[0] = (world->cam_dir == N) ? 0.66 : -0.66;
-		world->cam_plane[1] = 0;
-	}
-	else
-	{
-		world->dir[0] = (world->cam_dir == W) ? 1 : -1;
-		world->dir[1] = 0;
-		world->cam_plane[0] = 0;
-		world->cam_plane[1] = (world->cam_dir == W) ? -0.66 : 0.66;
-	}
-}
-
 t_bool	init_other_stuff(t_world *world)
 {
-	if (!parse_map(world))
-		return (FALSE);
-	if (!sprites_init(world))
-		return (FALSE);
-	cam_init(world);
-	if (!(world->depth_buffer = ft_calloc(world->scr_width, sizeof(double))))
+	if (!(world->depth_buffer = malloc(world->scr_width * sizeof(double))))
 		return (FALSE);
 	if (!screen_init(world))
 		return (FALSE);
-	load_texture(world, &(world->textures_gun[0]), "./sprites/gun.xpm");
-	load_texture(world, &(world->textures_gun[1]), "./sprites/gun_shoot.xpm");
 	world->nb_pixels = world->scr_width * world->scr_height *
 		(world->screen.bpp >> 3);
 	world->jump_coeff = 0.0;
 	world->life = 100;
-	world->gun_shift = 0;
 	if (world->save)
 	{
 		world->fd_save = open("cub3d_bonus.bmp", O_WRONLY | O_CREAT, 0777);

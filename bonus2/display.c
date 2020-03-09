@@ -29,13 +29,11 @@ void	draw_square(t_world *world, int x, int y, int cell)
 	int		color;
 
 	if (cell == 0)
-		color = 0xFFFFFF;
+		color = 0x80FFFFFF;
 	else if (cell == 1)
-		color = 0x00009F;
-	else if (cell == 2 || cell == 3)
-		color = (cell == 2) ? 0x9F0000 : 0x855CAD;
+		color = 0x0000FF;
 	else
-		color = 0x009F00;
+		color = (cell == 2) ? 0x9F0000 : 0x009F00;
 	j = y;
 	while (j < y + world->minimap_unit)
 	{
@@ -61,20 +59,20 @@ void	draw_minimap(t_world *world, int offset_x, int offset_y, int width)
 	if (offset_y < 0)
 		offset_y = world->scr_height + offset_y
 		- world->map_height * world->minimap_unit;
-	i = 0;
-	while (i < world->map_height)
+	j = 0;
+	while (j < world->map_height)
 	{
-		j = 0;
-		while (j < world->map_width)
+		i = 0;
+		while (i < world->map_width)
 		{
 			draw_square(world, offset_x + j * world->minimap_unit,
 				offset_y + i * world->minimap_unit, world->map[i][j]);
-			j++;
+			i++;
 		}
-		i++;
+		j++;
 	}
 	draw_square(world, (int)(offset_x + world->pos[1] * world->minimap_unit),
-		(int)(offset_y + world->pos[0] * world->minimap_unit), 42);
+		(int)(offset_y + world->pos[0] * world->minimap_unit), 3);
 }
 
 void	draw_life(t_world *world, int offset_x, int offset_y, int width)
@@ -111,7 +109,7 @@ void	draw_gun(t_world *world, t_bool shooting)
 	while (i < 0.8 * world->scr_width)
 	{
 		j = 0.6 * world->scr_height;
-		while (j + world->gun_shift < world->scr_height)
+		while (j < world->scr_height)
 		{
 			color = get_tex_color(world->textures_gun[shooting],
 				((i - 0.4 * world->scr_width) / (0.4 * world->scr_width)),

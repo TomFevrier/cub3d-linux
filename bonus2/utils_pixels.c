@@ -29,14 +29,17 @@ void	set_screen_pixel(t_img screen, int i, int j, int color)
 	unsigned char	r;
 	unsigned char	g;
 	unsigned char	b;
+	unsigned char	a;
 
 	r = (unsigned char)(color >> 16);
 	g = (unsigned char)((color % 65536) >> 8);
 	b = (unsigned char)(color % 256);
+	a = (unsigned char)(color >> 24);
 	ptr = screen.data + j * screen.size_line + i * (screen.bpp >> 3);
-	*ptr = (screen.endian ? r : b);
+	*ptr = screen.endian ? r : b;
 	*(ptr + 1) = g;
-	*(ptr + 2) = (screen.endian ? b : r);
+	*(ptr + 2) = screen.endian ? b : r;
+	*(ptr + 3) = a;
 }
 
 int		get_screen_pixel(t_img screen, int i, int j)

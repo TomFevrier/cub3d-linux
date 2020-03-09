@@ -21,6 +21,7 @@
 # include <unistd.h>
 # include <math.h>
 # include <mlx.h>
+# include <dirent.h>
 
 # include "../get_next_line/get_next_line.h"
 
@@ -33,9 +34,14 @@
 # define KEY_S 1
 # define KEY_D 2
 # define KEY_W 13
+# define KEY_ENTER 36
+# define KEY_SPACE 49
 # define KEY_ESC 53
+# define KEY_F10 109
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
+# define KEY_DOWN 125
+# define KEY_UP 126
 
 typedef int			t_bool;
 
@@ -86,6 +92,9 @@ typedef struct		s_ctrls
 	t_bool	d;
 	t_bool	left;
 	t_bool	right;
+	t_bool	up;
+	t_bool	down;
+	t_bool	space;
 }					t_ctrls;
 
 typedef struct		s_img
@@ -103,14 +112,26 @@ typedef struct		s_sprite
 {
 	int		pos[2];
 	double	distance;
+	t_bool	killable;
+	t_bool	destroyed;
 	t_img	texture;
 }					t_sprite;
+
+typedef struct		s_menu
+{
+	t_mlx			mlx;
+	int				scr_width;
+	int				scr_height;
+	int				nb_levels;
+	char			**levels;
+	int				selected_level;
+}					t_menu;
 
 typedef struct		s_world
 {
 	t_mlx			mlx;
+	t_menu			*menu;
 	int				fd;
-	t_bool			error;
 	int				scr_width;
 	int				scr_height;
 	int				map_width;
@@ -118,27 +139,45 @@ typedef struct		s_world
 	char			*raw_map;
 	char			**char_map;
 	int				**map;
-	int				color_floor;
-	int				color_ceiling;
 	t_img			textures[4];
+	t_img			texture_floor;
+	t_img			texture_sky;
 	t_img			texture_sprite;
 	int				nb_sprites;
 	t_sprite		*sprites;
 	t_img			screen;
 	t_ctrls			ctrls;
+	double			jump_coeff;
+	double			jump_speed;
+	int				life;
+	t_img			textures_gun[2];
+	int				gun_shift;
+	t_bool			gun_dir;
 	int				nb_pixels;
 	double			*depth_buffer;
+	int				minimap_unit;
 	double			pos[2];
 	double			dir[2];
 	double			cam_plane[2];
 	t_side			cam_dir;
+	char			*music_file;
 	t_bool			save;
 	int				fd_save;
+	int				screenshot_index;
+	t_bool			game_over;
+	t_bool			won;
 }					t_world;
 
-t_world				*world_init(int argc, char **argv);
+t_menu				*menu_init(int width, int height, char *folder);
+void				draw_menu(t_menu *menu);
+
+t_bool				launch_menu(t_menu *menu);
+t_bool				launch_level(char *filename, t_menu *menu);
+
+t_world				*world_init(char *filename, t_menu *menu);
 
 t_bool				init_other_stuff(t_world *world);
+t_bool				screen_init(t_world *world);
 
 void				parse_line(t_world *world, char *line, int line_nb,
 					int res);
@@ -148,7 +187,11 @@ t_bool				parse_map(t_world *world);
 void				read_map_row(t_world *world, char *ptr);
 
 void				check_missing(t_world *world);
-void				check_map(t_world *world);
+t_bool				check_map(t_world *world);
+t_bool				check_map_row(t_world *world, int i, int j,
+					t_bool cam_parsed);
+
+t_bool				game_loop(t_world *world);
 
 void				draw(t_world *world);
 
@@ -156,12 +199,22 @@ void				run_dda(t_world *world, int i, double ray[2]);
 
 void				draw_sprites(t_world *world);
 
+void				draw_minimap(t_world *world, int offset_x, int offset_y,
+					int width);
+void				draw_life(t_world *world, int offset_x, int offset_y,
+					int width);
+void				draw_gun(t_world *world, t_bool shooting);
+void				write_text(t_mlx mlx, int pos[2], char *text, int color);
+
 int					key_pressed(int key, t_world *world);
+int					key_pressed_menu(int key, t_menu *menu);
 int					key_released(int key, t_world *world);
-int					quit(t_world *world, t_bool exit_value);
+int					quit(t_menu *menu);
 
 t_bool				move(t_world *world);
 t_bool				rotate(t_world *world);
+t_bool				jump(t_world *world);
+t_bool				shoot(t_world *world);
 
 int					ft_strlen(char *str);
 int					ft_indexof(char *str, char c);
@@ -169,18 +222,20 @@ int					ft_strcmp(char *s1, char *s2);
 int					ft_atoi_easy(char *str);
 char				*ft_trim(char *str);
 char				*ft_remove_spaces(char *str);
+char				*format_name(char *filename);
 
 void				set_screen_pixel(t_img screen, int i, int j, int color);
 int					get_screen_pixel(t_img screen, int i, int j);
-int					get_tex_color(t_img tex, double u, double v);
+int					get_tex_color(t_img tex, double u, double v, double darken);
 t_bool				load_texture(t_world *world, t_img *texture,
 					char *filename);
 
 void				number_to_mem(char *dest, int nb, int nb_bytes);
 void				write_bmp_header(t_world *world);
 void				flip_pixels(t_world *world);
+void				save_screenshot(t_world *world);
 
-void				*ft_calloc(int count, int size);
 void				free_world(t_world *world);
+void				free_menu(t_menu *menu);
 
 #endif

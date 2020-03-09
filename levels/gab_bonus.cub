@@ -6,6 +6,7 @@ EA ./textures/gab.xpm
 S ./textures/gab.xpm
 SK ./textures/gab.xpm
 F ./textures/gab.xpm
+P ./sprites/portal.xpm
 M ./music/guile.mp3
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1

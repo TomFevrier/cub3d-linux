@@ -1,0 +1,11 @@
+R 1280 720
+NO ./textures/metro.xpm
+SO ./textures/bricks.xpm
+WE ./textures/wood.xpm
+EA ./textures/wallpaper.xpm
+C 153,153,255
+F 153,51,51
+S ./sprites/pine.xpm
+111
+1E1
+111

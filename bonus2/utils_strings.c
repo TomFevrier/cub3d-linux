@@ -41,10 +41,10 @@ char	*ft_trim(char *str)
 {
 	int		i;
 
-	i = ft_strlen(str) - 1;
-	while (i >= 0 && str[i] <= ' ')
-		i--;
-	str[i + 1] = '\0';
+	i = 0;
+	while (str[i] > ' ')
+		i++;
+	str[i] = '\0';
 	return (str);
 }
 
@@ -75,16 +75,8 @@ char	*ft_remove_spaces(char *str)
 	return (new_str);
 }
 
-int		char_in_str(char c, char *str)
+char	*format_name(char *filename)
 {
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (c == str[i])
-			return (i);
-		i++;
-	}
-	return (-1);
+	*(filename + ft_strlen(filename) - 10) = '\0';
+	return (filename);
 }

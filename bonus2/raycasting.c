@@ -42,7 +42,7 @@ void	draw_line_textured(t_world *world, int i, t_texdata data)
 	{
 		color = get_tex_color(texture, data.wall_x,
 			((j - start) * 1.0) / (end - start),
-			(data.line_height * 1.0 / world->scr_height));
+			(data.line_height * 3.0 / world->scr_height));
 		set_screen_pixel(world->screen, i, j++, color);
 	}
 }
@@ -101,8 +101,6 @@ void	run_dda(t_world *world, int i, double ray[2])
 		? world->pos[1] + data.wall_dist * ray[1]
 		: world->pos[0] + data.wall_dist * ray[0];
 	data.wall_x -= floor(data.wall_x);
-	data.line_height = (data.wall_dist > 0)
-		? world->scr_height / data.wall_dist
-		: 2147483647;
+	data.line_height = world->scr_height / data.wall_dist;
 	draw_line_textured(world, i, data);
 }

@@ -20,7 +20,7 @@ void	game_over(t_world *world)
 	pos[1] = world->scr_height / 2 - 20;
 	write_text(world->mlx, pos, "GAME OVER", 0x9F0000);
 	pos[1] += 20;
-	write_text(world->mlx, pos, "Press ECHAP to quit the game",
+	write_text(world->mlx, pos, "Press ECHAP to return to the main menu",
 		0xFFFFFF);
 	world->game_over = TRUE;
 }
@@ -33,7 +33,7 @@ void	you_won(t_world *world)
 	pos[1] = world->scr_height / 2 - 20;
 	write_text(world->mlx, pos, "YOU WON", 0x009F00);
 	pos[1] += 20;
-	write_text(world->mlx, pos, "Press ECHAP to quit the game",
+	write_text(world->mlx, pos, "Press ECHAP to return to the main menu",
 		0xFFFFFF);
 }
 

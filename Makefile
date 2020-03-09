@@ -1,10 +1,10 @@
 NAME =		Cub3D
 
-SRCS =		srcs/cub3d.c \
+SRCS =		srcs/main.c \
 			srcs/init1.c \
 			srcs/init2.c \
-			srcs/parsing1.c \
-			srcs/parsing2.c \
+			srcs/parsing.c \
+			srcs/map.c \
 			srcs/checks.c \
 			srcs/draw.c \
 			srcs/raycasting.c \
@@ -14,15 +14,15 @@ SRCS =		srcs/cub3d.c \
 			srcs/utils_strings.c \
 			srcs/utils_pixels.c \
 			srcs/utils_bmp.c \
+			srcs/memory.c \
 			get_next_line/get_next_line.c \
 			get_next_line/get_next_line_utils.c
 
-BONUS =		bonus/cub3d.c \
-			bonus/menu.c \
+BONUS =		bonus/main.c \
 			bonus/init1.c \
 			bonus/init2.c \
-			bonus/parsing1.c \
-			bonus/parsing2.c \
+			bonus/parsing.c \
+			bonus/map.c \
 			bonus/checks.c \
 			bonus/game.c \
 			bonus/draw.c \
@@ -34,7 +34,7 @@ BONUS =		bonus/cub3d.c \
 			bonus/utils_strings.c \
 			bonus/utils_pixels.c \
 			bonus/utils_bmp.c \
-			bonus/free.c \
+			bonus/memory.c \
 			get_next_line/get_next_line.c \
 			get_next_line/get_next_line_utils.c
 

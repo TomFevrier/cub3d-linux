@@ -6,6 +6,7 @@ EA ./textures/wallpaper.xpm
 S ./sprites/pine.xpm
 SK ./textures/sky.xpm
 F ./textures/grass.xpm
+P ./sprites/portal.xpm
 M ./music/great_wall.mp3
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1

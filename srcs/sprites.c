@@ -83,8 +83,7 @@ void	draw_sprite(t_world *world, t_spritedata data)
 	while (i <= (bbox_x[1] >= world->scr_width ?
 		world->scr_width - 1 : bbox_x[1]))
 	{
-		if (data.transform[1] > 0 && i > 0
-			&& data.transform[1] < world->depth_buffer[i])
+		if (data.transform[1] > 0 && data.transform[1] < world->depth_buffer[i])
 			draw_line_sprite(world, data, i, bbox_x);
 		i++;
 	}

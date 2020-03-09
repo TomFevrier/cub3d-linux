@@ -12,6 +12,53 @@
 
 #include "cub3d.h"
 
+t_bool	sprites_init(t_world *world)
+{
+	int		i;
+	int		j;
+	int		index;
+
+	if (!(world->sprites = ft_calloc(world->nb_sprites, sizeof(t_sprite))))
+		return (FALSE);
+	index = 0;
+	i = 0;
+	while (i < world->map_height)
+	{
+		j = 0;
+		while (j < world->map_width)
+		{
+			if (world->map[i][j] == 2)
+			{
+				world->sprites[index].texture = world->texture_sprite;
+				world->sprites[index].pos[0] = i;
+				world->sprites[index].pos[1] = j;
+				index++;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (TRUE);
+}
+
+void	cam_init(t_world *world)
+{
+	if (world->cam_dir == N || world->cam_dir == S)
+	{
+		world->dir[0] = 0;
+		world->dir[1] = (world->cam_dir == N) ? 1 : -1;
+		world->cam_plane[0] = (world->cam_dir == N) ? 0.66 : -0.66;
+		world->cam_plane[1] = 0;
+	}
+	else
+	{
+		world->dir[0] = (world->cam_dir == W) ? 1 : -1;
+		world->dir[1] = 0;
+		world->cam_plane[0] = 0;
+		world->cam_plane[1] = (world->cam_dir == W) ? -0.66 : 0.66;
+	}
+}
+
 t_bool	screen_init(t_world *world)
 {
 	if (!(world->screen.ptr = mlx_new_image(world->mlx.ptr,
@@ -26,7 +73,12 @@ t_bool	screen_init(t_world *world)
 
 t_bool	init_other_stuff(t_world *world)
 {
-	if (!(world->depth_buffer = malloc(world->scr_width * sizeof(double))))
+	if (!parse_map(world))
+		return (FALSE);
+	if (!sprites_init(world))
+		return (FALSE);
+	cam_init(world);
+	if (!(world->depth_buffer = ft_calloc(world->scr_width, sizeof(double))))
 		return (FALSE);
 	if (!screen_init(world))
 		return (FALSE);
