@@ -43,8 +43,6 @@ t_world	*world_init(int argc, char **argv)
 
 	if (!(world = (t_world *)ft_calloc(1, sizeof(t_world))))
 		return (NULL);
-	if (!(world->mlx.ptr = mlx_init()))
-		return (NULL);
 	if (argc < 2)
 		parsing_error(world, "No scene file specified", 0);
 	else if (ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub") != 0)

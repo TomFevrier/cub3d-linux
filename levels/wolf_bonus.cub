@@ -2,9 +2,9 @@ R 1280 720
 NO ./textures/eagle_wolf.xpm
 SO ./textures/redbrick_wolf.xpm
 WE ./textures/greystone_wolf.xpm
-EA ./textures/purplestone_wolf.xpm
+EA ./textures/wood_wolf.xpm
 S ./sprites/barrel_wolf.xpm
-SK ./textures/wood_wolf.xpm
+SK ./textures/purplestone_wolf.xpm
 F ./textures/colorstone_wolf.xpm
 P ./sprites/portal.xpm
 M ./music/pacific_rim.mp3

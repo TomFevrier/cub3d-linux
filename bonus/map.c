@@ -71,7 +71,7 @@ void	parse_map_row(t_world *world, int i)
 	j = 0;
 	while (world->char_map[i][j])
 	{
-		if (ft_indexof(" 0123NWSE", world->char_map[i][j]) < 0)
+		if (ft_indexof(" \t0123NWSE", world->char_map[i][j]) < 0)
 			parsing_error(world, "Map contains invalid characters", 0);
 		j++;
 	}

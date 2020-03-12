@@ -1,5 +1,8 @@
 .DS_Store
-*.dSYM/*
+Cub3D.dSYM
+Cub3D_bonus.dSYM
 Cub3D
 Cub3D_bonus
+Cub3D_drunk
 *.bmp
+bonus2

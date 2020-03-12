@@ -23,6 +23,29 @@ t_bool	load_texture(t_world *world, t_img *texture, char *filename)
 	return (TRUE);
 }
 
+void	load_textures(t_world *world)
+{
+	t_side	side;
+
+	side = N;
+	while (side <= E)
+	{
+		load_texture(world, &(world->textures[side]),
+			world->textures[side].filename);
+		side++;
+	}
+	load_texture(world, &(world->texture_sprite),
+		world->texture_sprite.filename);
+	load_texture(world, &(world->texture_sky), world->texture_sky.filename);
+	load_texture(world, &(world->texture_floor), world->texture_floor.filename);
+	load_texture(world, &(world->texture_portal),
+		world->texture_portal.filename);
+	load_texture(world, &(world->textures_gun[0]), "./sprites/gun.xpm");
+	load_texture(world, &(world->textures_gun[1]), "./sprites/gun_shoot.xpm");
+	if (world->error)
+		quit(world, ERROR);
+}
+
 void	set_screen_pixel(t_img screen, int i, int j, int color)
 {
 	char			*ptr;

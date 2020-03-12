@@ -90,6 +90,7 @@ typedef struct		s_ctrls
 
 typedef struct		s_img
 {
+	char	*filename;
 	void	*ptr;
 	int		width;
 	int		height;
@@ -173,8 +174,7 @@ char				*ft_remove_spaces(char *str);
 void				set_screen_pixel(t_img screen, int i, int j, int color);
 int					get_screen_pixel(t_img screen, int i, int j);
 int					get_tex_color(t_img tex, double u, double v);
-t_bool				load_texture(t_world *world, t_img *texture,
-					char *filename);
+void				load_textures(t_world *world);
 
 void				number_to_mem(char *dest, int nb, int nb_bytes);
 void				write_bmp_header(t_world *world);

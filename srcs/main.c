@@ -38,5 +38,6 @@ int		main(int argc, char **argv)
 		mlx_loop_hook(world->mlx.ptr, game_loop, world);
 		mlx_loop(world->mlx.ptr);
 	}
+	quit(world, SUCCESS);
 	return (SUCCESS);
 }

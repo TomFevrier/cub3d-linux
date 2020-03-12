@@ -25,29 +25,47 @@ void	*ft_calloc(int count, int size)
 	return ((void *)ptr);
 }
 
-void	free_textures(t_world *world)
+void	free_textures2(t_world *world)
+{
+	if (world->texture_sprite.filename)
+		free(world->texture_sprite.filename);
+	if (world->texture_sprite.data)
+		mlx_destroy_image(world->mlx.ptr, world->texture_sprite.ptr);
+	if (world->texture_portal.filename)
+		free(world->texture_portal.filename);
+	if (world->texture_portal.data)
+		mlx_destroy_image(world->mlx.ptr, world->texture_portal.ptr);
+	if (world->textures_gun[0].filename)
+		free(world->textures_gun[0].filename);
+	if (world->textures_gun[0].data)
+		mlx_destroy_image(world->mlx.ptr, world->textures_gun[0].ptr);
+	if (world->textures_gun[1].filename)
+		free(world->textures_gun[1].filename);
+	if (world->textures_gun[1].data)
+		mlx_destroy_image(world->mlx.ptr, world->textures_gun[1].ptr);
+}
+
+void	free_textures1(t_world *world)
 {
 	t_side	side;
 
 	side = N;
-	while (side < E)
+	while (side <= E)
 	{
+		if (world->textures[side].filename)
+			free(world->textures[side].filename);
 		if (world->textures[side].data)
 			mlx_destroy_image(world->mlx.ptr, world->textures[side].ptr);
 		side++;
 	}
+	if (world->texture_floor.filename)
+		free(world->texture_floor.filename);
 	if (world->texture_floor.data)
 		mlx_destroy_image(world->mlx.ptr, world->texture_floor.ptr);
+	if (world->texture_sky.filename)
+		free(world->texture_sky.filename);
 	if (world->texture_sky.data)
 		mlx_destroy_image(world->mlx.ptr, world->texture_sky.ptr);
-	if (world->texture_sprite.data)
-		mlx_destroy_image(world->mlx.ptr, world->texture_sprite.ptr);
-	if (world->texture_portal.data)
-		mlx_destroy_image(world->mlx.ptr, world->texture_portal.ptr);
-	if (world->textures_gun[0].data)
-		mlx_destroy_image(world->mlx.ptr, world->textures_gun[0].ptr);
-	if (world->textures_gun[1].data)
-		mlx_destroy_image(world->mlx.ptr, world->textures_gun[1].ptr);
 }
 
 void	free_map(t_world *world)
@@ -74,7 +92,8 @@ void	free_world(t_world *world)
 		free(world->music_file);
 	if (world->screen.data)
 		mlx_destroy_image(world->mlx.ptr, world->screen.ptr);
-	free_textures(world);
+	free_textures1(world);
+	free_textures2(world);
 	free_map(world);
 	if (world->mlx.win)
 		mlx_destroy_window(world->mlx.ptr, world->mlx.win);

@@ -37,12 +37,13 @@ void	parse_resolution(t_world *world, char *ptr, int line_nb)
 
 void	parse_texture(t_world *world, char *ptr, t_img *texture, int line_nb)
 {
-	if (texture->data)
+	if (texture->filename)
 		parsing_error(world, "Texture was already defined", line_nb);
 	while (*ptr <= ' ')
 		ptr++;
-	if (!load_texture(world, texture, ft_trim(ptr)))
-		parsing_error(world, "Texture is invalid", line_nb);
+	texture->filename = ft_strdup(ft_trim(ptr));
+	if (open(texture->filename, O_RDONLY) < 0)
+		parsing_error(world, "Texture filename is invalid", 0);
 }
 
 void	parse_other_line(t_world *world, char *line, int line_nb, int res)

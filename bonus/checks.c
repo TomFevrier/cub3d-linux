@@ -37,22 +37,22 @@ void	check_missing(t_world *world)
 {
 	if (!world->scr_width)
 		parsing_error(world, "Resolution must be defined before the map", 0);
-	else if (!world->texture_floor.data)
+	else if (!world->texture_floor.filename)
 		parsing_error(world, "Floor texture must be defined before the map", 0);
-	else if (!world->texture_sky.data)
+	else if (!world->texture_sky.filename)
 		parsing_error(world, "Sky texture must be defined before the map", 0);
-	else if (!world->textures[N].data)
+	else if (!world->textures[N].filename)
 		parsing_error(world, "North texture must be defined before the map", 0);
-	else if (!world->textures[W].data)
+	else if (!world->textures[W].filename)
 		parsing_error(world, "West texture must be defined before the map", 0);
-	else if (!world->textures[S].data)
+	else if (!world->textures[S].filename)
 		parsing_error(world, "South texture must be defined before the map", 0);
-	else if (!world->textures[E].data)
+	else if (!world->textures[E].filename)
 		parsing_error(world, "East texture must be defined before the map", 0);
-	else if (!world->texture_sprite.data)
+	else if (!world->texture_sprite.filename)
 		parsing_error(world, "Sprite texture must be defined before the map",
 		0);
-	else if (!world->texture_portal.data)
+	else if (!world->texture_portal.filename)
 		parsing_error(world, "Portal texture must be defined before the map",
 		0);
 	else if (!world->music_file)

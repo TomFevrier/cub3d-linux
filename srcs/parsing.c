@@ -69,17 +69,18 @@ void	parse_texture(t_world *world, char *ptr, int id, int line_nb)
 {
 	t_img	*texture;
 
-	if (id == 4 && world->texture_sprite.data)
+	if (id == 4 && world->texture_sprite.filename)
 		parsing_error(world, "Sprite texture was already defined", line_nb);
-	else if (id < 4 && world->textures[id].data)
+	else if (id < 4 && world->textures[id].filename)
 		parsing_error(world, "Wall texture was already defined", line_nb);
 	else
 	{
 		texture = (id < 4) ? &(world->textures[id]) : &(world->texture_sprite);
 		while (*ptr <= ' ')
 			ptr++;
-		if (!load_texture(world, texture, ft_trim(ptr)))
-			parsing_error(world, "Texture is invalid", line_nb);
+		texture->filename = ft_strdup(ft_trim(ptr));
+		if (open(texture->filename, O_RDONLY) < 0)
+			parsing_error(world, "Texture filename is invalid", 0);
 	}
 }
 

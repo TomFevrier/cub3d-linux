@@ -30,8 +30,6 @@ void	draw_walls(t_world *world)
 
 void	draw(t_world *world)
 {
-	if (world->error)
-		quit(world, ERROR);
 	draw_walls(world);
 	draw_sprites(world);
 	if (world->save)

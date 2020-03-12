@@ -75,9 +75,12 @@ t_bool	init_other_stuff(t_world *world)
 {
 	if (!parse_map(world))
 		return (FALSE);
+	cam_init(world);
+	if (!(world->mlx.ptr = mlx_init()))
+		return (FALSE);
+	load_textures(world);
 	if (!sprites_init(world))
 		return (FALSE);
-	cam_init(world);
 	if (!(world->depth_buffer = ft_calloc(world->scr_width, sizeof(double))))
 		return (FALSE);
 	if (!screen_init(world))

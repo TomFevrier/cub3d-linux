@@ -42,7 +42,7 @@ void	draw_line_textured(t_world *world, int i, t_texdata data)
 	{
 		color = get_tex_color(texture, data.wall_x,
 			((j - start) * 1.0) / (end - start),
-			(data.line_height * 1.0 / world->scr_height));
+			(data.line_height * 3.0 / world->scr_height));
 		set_screen_pixel(world->screen, i, j++, color);
 	}
 }

@@ -80,15 +80,15 @@ t_bool	init_other_stuff(t_world *world)
 {
 	if (!parse_map(world))
 		return (FALSE);
+	cam_init(world);
+	world->mlx.ptr = mlx_init();
+	load_textures(world);
 	if (!sprites_init(world))
 		return (FALSE);
-	cam_init(world);
 	if (!(world->depth_buffer = ft_calloc(world->scr_width, sizeof(double))))
 		return (FALSE);
 	if (!screen_init(world))
 		return (FALSE);
-	load_texture(world, &(world->textures_gun[0]), "./sprites/gun.xpm");
-	load_texture(world, &(world->textures_gun[1]), "./sprites/gun_shoot.xpm");
 	world->nb_pixels = world->scr_width * world->scr_height *
 		(world->screen.bpp >> 3);
 	world->jump_coeff = 0.0;
