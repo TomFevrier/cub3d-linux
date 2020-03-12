@@ -62,10 +62,4 @@ re: 		fclean all
 bonus:
 			gcc $(FLAGS) -I $(INC) -g -L $(LIB) -l mlx $(GFX_FLAGS) $(BONUS) -o $(NAME)_bonus
 
-run:		re
-			./$(NAME) ./levels/garden.cub
-
-run_save:	re
-			./$(NAME) ./levels/garden.cub --save
-
 .PHONY:		all clean fclean re bonus
