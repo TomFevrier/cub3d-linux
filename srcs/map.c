@@ -24,7 +24,7 @@ void	map_cell_init(t_world *world, int i, int j, t_bool *cam_parsed)
 			parsing_error(world, "Map must only contain one player", 0);
 		else
 		{
-			world->cam_dir = ft_indexof("NWSE", world->map[i][j]);
+			world->cam_dir = ft_indexof("NWSE", world->char_map[i][j]);
 			world->map[i][j] = 0;
 			world->pos[0] = i;
 			world->pos[1] = j;

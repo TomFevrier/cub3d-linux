@@ -60,19 +60,19 @@ t_bool	sprites_init(t_world *world)
 
 void	cam_init(t_world *world)
 {
-	if (world->cam_dir == N || world->cam_dir == S)
+	if (world->cam_dir == E || world->cam_dir == W)
 	{
 		world->dir[0] = 0;
-		world->dir[1] = (world->cam_dir == N) ? 1 : -1;
-		world->cam_plane[0] = (world->cam_dir == N) ? 0.66 : -0.66;
+		world->dir[1] = (world->cam_dir == E) ? 1 : -1;
+		world->cam_plane[0] = (world->cam_dir == E) ? 0.66 : -0.66;
 		world->cam_plane[1] = 0;
 	}
 	else
 	{
-		world->dir[0] = (world->cam_dir == W) ? 1 : -1;
+		world->dir[0] = (world->cam_dir == S) ? 1 : -1;
 		world->dir[1] = 0;
 		world->cam_plane[0] = 0;
-		world->cam_plane[1] = (world->cam_dir == W) ? -0.66 : 0.66;
+		world->cam_plane[1] = (world->cam_dir == S) ? -0.66 : 0.66;
 	}
 }
 

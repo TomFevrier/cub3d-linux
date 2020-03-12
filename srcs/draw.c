@@ -40,6 +40,7 @@ void	draw(t_world *world)
 	}
 	else
 	{
+		draw_minimap(world, 10, 10, 100);
 		mlx_put_image_to_window(world->mlx.ptr, world->mlx.win,
 			world->screen.ptr, 0, 0);
 	}
