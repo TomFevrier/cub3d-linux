@@ -6,7 +6,7 @@
 /*   By: tfevrier <tfevrier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 16:34:02 by tfevrier          #+#    #+#             */
-/*   Updated: 2019/12/17 16:34:07 by tfevrier         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:28:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	draw(t_world *world)
 	}
 	else
 	{
-		draw_minimap(world, 10, 10, 100);
 		mlx_put_image_to_window(world->mlx.ptr, world->mlx.win,
 			world->screen.ptr, 0, 0);
 	}

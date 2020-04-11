@@ -6,7 +6,7 @@
 /*   By: tfevrier <tfevrier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 15:17:58 by tfevrier          #+#    #+#             */
-/*   Updated: 2019/12/17 15:18:10 by tfevrier         ###   ########.fr       */
+/*   Updated: 2020/04/11 14:54:21 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,6 @@ t_bool	shoot(t_world *world)
 		}
 		i--;
 	}
-	system("afplay ./music/gunshot.mp3 &");
+	system("ffplay ./music/gunshot.mp3 -nodisp -loglevel quiet &");
 	return (TRUE);
 }

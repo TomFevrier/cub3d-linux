@@ -6,7 +6,7 @@
 /*   By: tfevrier <tfevrier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 15:24:55 by tfevrier          #+#    #+#             */
-/*   Updated: 2019/12/04 15:24:56 by tfevrier         ###   ########.fr       */
+/*   Updated: 2020/04/11 14:43:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ t_bool	key_pressed(int key, t_world *world)
 		world->ctrls.right = TRUE;
 	else if (key == KEY_UP)
 		world->ctrls.up = TRUE;
-	else if (key == KEY_DOWN)
-		world->ctrls.down = TRUE;
 	else if (key == KEY_SPACE)
 		world->ctrls.space = TRUE;
 	else if (key == KEY_F10)
@@ -55,8 +53,6 @@ t_bool	key_released(int key, t_world *world)
 		world->ctrls.right = FALSE;
 	else if (key == KEY_UP)
 		world->ctrls.up = FALSE;
-	else if (key == KEY_DOWN)
-		world->ctrls.down = FALSE;
 	else if (key == KEY_SPACE)
 	{
 		world->ctrls.space = FALSE;

@@ -46,10 +46,12 @@ LIB =		/usr/local/lib
 
 GFX_FLAGS =	-framework OpenGL -framework AppKit
 
+LIB_FLAGS =	-lX11 -lXext -lm -lbsd -lmlx
+
 all: 		$(NAME)
 
 $(NAME):
-			gcc $(FLAGS) -I $(INC) -g -L $(LIB) -l mlx $(GFX_FLAGS) $(SRCS) -o $(NAME)
+			clang $(FLAGS) -I $(INC) -g -L $(LIB) $(SRCS) -o $(NAME) $(LIB_FLAGS)
 
 clean:
 			/bin/rm -rf $(SRCS:.c=.o) $(BONUS:.c=.o)
@@ -60,6 +62,6 @@ fclean:		clean
 re: 		fclean all
 
 bonus:
-			gcc $(FLAGS) -I $(INC) -g -L $(LIB) -l mlx $(GFX_FLAGS) $(BONUS) -o $(NAME)_bonus
+			clang $(FLAGS) -I $(INC) -g -L $(LIB) $(BONUS) -o $(NAME)_bonus $(LIB_FLAGS)
 
 .PHONY:		all clean fclean re bonus

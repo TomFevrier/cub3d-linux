@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tfevrier <tfevrier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 15:24:55 by tfevrier          #+#    #+#             */
-/*   Updated: 2019/12/04 15:24:56 by tfevrier         ###   ########.fr       */
+/*   Updated: 2020/04/11 14:47:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	free_map(t_world *world)
 
 void	free_world(t_world *world)
 {
-	system("killall afplay");
+	system("killall ffplay");
 	if (world->sprites)
 		free(world->sprites);
 	if (world->depth_buffer)
